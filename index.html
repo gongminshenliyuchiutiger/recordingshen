@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>錄音即時逐字稿暨重點摘要系統</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .recording-pulse {
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .paused-indicator {
+            background-color: #f59e0b; /* amber-500 */
+        }
+        .transcript-container,
+        .summary-container {
+            height: 300px;
+            overflow-y: auto;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db; /* gray-300 */
+            border-radius: 4px;
+           174:1
+            background-color: white;
+            font-family: 'Noto Sans TC', sans-serif;
+            resize: vertical;
+            line-height: 1.6;
+        }
+        .transcript-container {
+             white-space: pre-wrap;
+             word-wrap: break-word;
+        }
+        .audio-player {
+            width: 100%;
+            margin-top: 1rem;
+        }
+        .audio-player:focus { outline: none; }
+        .footer {
+            text-align: center;
+            padding: 1rem;
+            margin-top: 2rem;
+            color: #4a5568; /* gray-700 */
+            font-size: 0.875rem;
+        }
+        /* Button base styles */
+        .control-button {
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             font-medium py-2 px-4 rounded-lg transition duration-200;
+             cursor: pointer;
+             background: none; /* 移除背景 */
+             border-width: 2px; /* 明確邊框寬度 */
+        }
+        .control-button i { margin-right: 0.5rem; /* mr-2 */}
+        .control-button:hover {
+            background: none; /* 確保懸停時無背景 */
+        }
+        .icon-button {
+             background: none;
+             border: none;
+             padding: 0.25rem; /* p-1 */
+             cursor: pointer;
+             display: inline-flex;
+             align-items: center;
+             justify-content: center;
+             color: #4f46e5; /* indigo-600 */
+             transition: color 0.2s;
+             border-radius: 9999px; /* rounded-full for better hover */
+        }
+        .icon-button:hover {
+            color: #3730a3; /* indigo-800 */
+            background-color: #e0e7ff; /* indigo-100 */
+        }
+         .icon-button.danger:hover {
+             color: #dc2626; /* red-600 */
+             background-color: #fee2e2; /* red-100 */
+         }
+        .icon-button svg, .icon-button i {
+            width: 1.25rem; /* w-5 */
+            height: 1.25rem; /* h-5 */
+        }
+        .tooltip {
+          position: relative;
+          display: inline-block;
+        }
+        .tooltip .tooltiptext {
+          visibility: hidden;
+          width: 80px;
+          background-color: #555;
+          color: #fff;
+          text-align: center;
+          border-radius: 6px;
+          padding: 5px 0;
+          position: absolute;
+          z-index: 1;
+          bottom: 125%; /* Position above the button */
+          left: 50%;
+          margin-left: -40px; /* Center the tooltip */
+          opacity: 0;
+          transition: opacity 0.3s;
+          font-size: 0.75rem;
+        }
+        .tooltip:hover .tooltiptext {
+          visibility: visible;
+          opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mx-auto px-4 py-8 max-w-5xl">
+        <h1 class="text-3xl font-bold text-center text-indigo-800 mb-8">
+             <i class="fa-solid fa-headphones-simple mr-2"></i>錄音即時逐字稿暨重點摘要系統
+        </h1>
+
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+            <div class="flex flex-col md:flex-row items-center justify-between mb-6">
+                <div class="flex items-center mb-4 md:mb-0">
+                    <div id="recordingStatus" class="w-4 h-4 rounded-full bg-gray-400 mr-2 transition-colors duration-300"></div>
+                    <span id="statusText" class="text-lg font-medium">準備就緒</span>
+                </div>
+                <!-- Control Buttons -->
+                <div class="flex space-x-2">
+                    <button id="startRecording" class="control-button border border-indigo-600 text-indigo-600 hover:text-indigo-800">
+                        <i class="fa-solid fa-microphone"></i>開始錄音
+                    </button>
+                    <button id="pauseRecording" class="control-button border border-amber-500 text-amber-500 hover:text-amber-700 hidden">
+                        <i class="fa-solid fa-pause"></i>暫停錄音
+                    </button>
+                    <button id="resumeRecording" class="control-button border border-emerald-500 text-emerald-500 hover:text-emerald-700 hidden">
+                        <i class="fa-solid fa-play"></i>繼續錄音
+                    </button>
+                    <button id="stopRecording" class="control-button border border-red-600 text-red-600 hover:text-red-800 hidden">
+                        <i class="fa-solid fa-stop"></i>停止錄音
+                    </button>
+                </div>
+            </div>
+
+            <!-- Audio Player Section -->
+            <div id="audioSection" class="mb-6 hidden">
+                <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                    <h2 class="text-xl font-semibold mb-3 text-indigo-700">
+                       <i class="fa-solid fa-circle-play mr-2"></i>錄音回放
+                    </h2>
+                    <audio id="audioPlayer" class="audio-player" controls></audio>
+                    <div class="flex justify-end mt-3">
+                         <div class="tooltip">
+                            <button id="downloadButton" class="control-button border border-green-600 text-green-600 hover:text-green-800 flex items-center">
+                                <i class="fa-solid fa-download mr-2"></i>下載 MP3
+                            </button>
+                            <span class="tooltiptext">下載錄音</span>
+                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+                <!-- Transcript Section -->
+                <div class="w-full md:w-1/2">
+                    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 h-full flex flex-col">
+                        <div class="flex justify-between items-center mb-3">
+                            <h2 class="text-xl font-semibold text-indigo-700">
+                                <i class="fa-solid fa-file-lines mr-2"></i>即時逐字稿
+                            </h2>
+                            <div class="tooltip">
+                                <button id="copyTranscript" class="icon-button" title="複製逐字稿">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                                <span class="tooltiptext">複製全文</span>
+                            </div>
+                        </div>
+                        <textarea id="transcript" class="transcript-container text-gray-700 flex-grow" placeholder="錄音開始後，逐字稿將顯示在這裡..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Summary Section -->
+                <div class="w-full md:w-1/2">
+                    <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 h-full flex flex-col">
+                        <div class="flex justify-between items-center mb-3">
+                            <h2 class="text-xl font-semibold text-indigo-700">
+                                <i class="fa-solid fa-brain mr-2"></i>AI 重點摘要
+                            </h2>
+                            <div class="flex space-x-2">
+                                <div class="tooltip">
+                                    <button id="regenerateSummary" class="icon-button" title="重新生成摘要">
+                                        <i class="fa-solid fa-arrows-rotate"></i>
+                                    </button>
+                                    <span class="tooltiptext">重新生成</span>
+                                </div>
+                                <div class="tooltip">
+                                    <button id="copyMarkdown" class="icon-button" title="複製摘要">
+                                        <i class="fa-regular fa-copy"></i>
+                                    </button>
+                                    <span class="tooltiptext">複製摘要</span>
+                                </div>
+                            </div>
+                        </div>
+                        <textarea id="markdownEditor" class="summary-container text-gray-700 flex-grow" placeholder="錄音結束或點擊重新生成按鈕後，AI 將生成重點摘要..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions Section -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4 text-indigo-700">
+               <i class="fa-solid fa-circle-info mr-2"></i>操作說明
+            </h2>
+            <ul class="list-disc pl-5 text-gray-700 space-y-2">
+                <li>點擊 <i class="fa-solid fa-microphone text-indigo-600"></i> 開始錄音按鈕開始錄製。</li>
+                <li>系統將自動轉錄語音並顯示在 <i class="fa-solid fa-file-lines text-indigo-600"></i> 即時逐字稿區域，您可以直接編輯。</li>
+                <li>錄音中可點擊 <i class="fa-solid fa-pause text-amber-500"></i> 暫停錄音，再點擊 <i class="fa-solid fa-play text-emerald-500"></i> 繼續錄音。</li>
+                <li>點擊 <i class="fa-solid fa-stop text-red-600"></i> 停止錄音按鈕結束錄製。</li>
+                <li>錄音結束後，AI 會自動生成 <i class="fa-solid fa-brain text-indigo-600"></i> 重點摘要。您也可隨時編輯逐字稿後，點擊 <i class="fa-solid fa-arrows-rotate text-indigo-600"></i> 按鈕重新生成摘要。</li>
+                 <li>使用 <i class="fa-regular fa-copy text-indigo-600"></i> 按鈕複製逐字稿或摘要內容。</li>
+                <li>在 <i class="fa-solid fa-circle-play text-indigo-600"></i> 錄音回放區可以播放或下載 <i class="fa-solid fa-download text-green-600"></i> MP3 檔案。</li>
+            </ul>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Copyright © Liyuchiutiger Gongminshen</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Elements ---
+            const startButton = document.getElementById('startRecording');
+            const stopButton = document.getElementById('stopRecording');
+            const pauseButton = document.getElementById('pauseRecording');
+            const resumeButton = document.getElementById('resumeRecording');
+            const statusIndicator = document.getElementById('recordingStatus');
+            const statusText = document.getElementById('statusText');
+            const transcriptContainer = document.getElementById('transcript');
+            const markdownEditor = document.getElementById('markdownEditor');
+            const audioSection = document.getElementById('audioSection');
+            const audioPlayer = document.getElementById('audioPlayer');
+            const downloadButton = document.getElementById('downloadButton');
+            const copyMarkdownButton = document.getElementById('copyMarkdown');
+            const copyTranscriptButton = document.getElementById('copyTranscript');
+            const regenerateSummaryButton = document.getElementById('regenerateSummary');
+
+            // --- API Configuration ---
+            // !!! 安全警告：API 金鑰不應暴露在前端 !!!
+            const GEMINI_API_KEY = 'AIzaSyCerlnUOTQ4-5K6VRpugpRI1URcOF6ai2w';
+            const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+
+            // --- State Variables ---
+            let mediaRecorder;
+            let audioChunks = [];
+            let recognition;
+            let finalTranscriptBuffer = '';
+            let interimTranscript = '';
+            let audioBlob;
+            let audioUrl;
+            let isRecording = false;
+            let isPaused = false; // New state for pause/resume
+
+            // --- Helper Functions ---
+            function showCopySuccess(button, originalTitle, successIconHtml, originalIconHtml) {
+                 const originalInnerHtml = button.innerHTML;
+                 button.innerHTML = successIconHtml;
+                 button.title = "已複製！";
+                 button.disabled = true;
+                 setTimeout(() => {
+                    button.innerHTML = originalIconHtml;
+                    button.title = originalTitle;
+                    button.disabled = false;
+                 }, 1500);
+            }
+
+            function updateUIState() {
+                if (isRecording) {
+                    startButton.classList.add('hidden');
+                    stopButton.classList.remove('hidden');
+                    if (isPaused) {
+                        statusIndicator.classList.remove('bg-red-500', 'recording-pulse');
+                        statusIndicator.classList.add('paused-indicator'); // Amber color for paused
+                        statusText.textContent = '錄音已暫停';
+                        pauseButton.classList.add('hidden');
+                        resumeButton.classList.remove('hidden');
+                    } else {
+                        statusIndicator.classList.remove('paused-indicator');
+                        statusIndicator.classList.add('bg-red-500', 'recording-pulse');
+                        statusText.textContent = '錄音中...';
+                        pauseButton.classList.remove('hidden');
+                        resumeButton.classList.add('hidden');
+                    }
+                } else {
+                    // Not recording (stopped or initial state)
+                    startButton.classList.remove('hidden');
+                    stopButton.classList.add('hidden');
+                    pauseButton.classList.add('hidden');
+                    resumeButton.classList.add('hidden');
+                    statusIndicator.classList.remove('bg-red-500', 'recording-pulse', 'paused-indicator', 'bg-yellow-500');
+                    statusIndicator.classList.add('bg-gray-400');
+                    // statusText will be set specifically on stop or error
+                }
+            }
+
+            // --- Event Listeners ---
+            copyTranscriptButton.addEventListener('click', () => {
+                navigator.clipboard.writeText(transcriptContainer.value).then(() => {
+                    showCopySuccess(copyTranscriptButton, "複製逐字稿", `<i class="fa-solid fa-check text-green-600"></i>`, `<i class="fa-regular fa-copy"></i>`);
+                }).catch(err => console.error('無法複製逐字稿:', err));
+            });
+
+            copyMarkdownButton.addEventListener('click', () => {
+                navigator.clipboard.writeText(markdownEditor.value).then(() => {
+                     showCopySuccess(copyMarkdownButton, "複製摘要", `<i class="fa-solid fa-check text-green-600"></i>`, `<i class="fa-regular fa-copy"></i>`);
+                }).catch(err => console.error('無法複製摘要:', err));
+            });
+
+            regenerateSummaryButton.addEventListener('click', () => {
+                const currentTranscript = transcriptContainer.value.trim();
+                if (!currentTranscript) {
+                    alert("逐字稿是空的，無法生成摘要。");
+                    return;
+                }
+                 if (isRecording && !isPaused) {
+                     alert("請先暫停或停止錄音，再重新生成摘要。");
+                     return;
+                 }
+                statusIndicator.classList.remove('bg-gray-400');
+                statusIndicator.classList.add('bg-yellow-500'); // Yellow for processing
+                statusText.textContent = '正在重新生成摘要...';
+                markdownEditor.placeholder = 'AI 正在努力工作中，請稍候...';
+                markdownEditor.value = ''; // Clear previous summary
+                generateRealAISummary(currentTranscript);
+            });
+
+            // --- Browser Support Check ---
+            if (!('webkitSpeechRecognition' in window) || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                alert('您的瀏覽器不支援所需功能，建議使用最新版 Chrome 或 Edge。');
+                startButton.disabled = true;
+                return;
+            }
+
+            // --- Speech Recognition Setup ---
+            const initSpeechRecognition = () => {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.lang = 'zh-TW';
+
+                recognition.onresult = (event) => {
+                    let currentInterim = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            finalTranscriptBuffer += event.results[i][0].transcript.trim() + ' ';
+                        } else {
+                            currentInterim += event.results[i][0].transcript;
+                        }
+                    }
+                    interimTranscript = currentInterim;
+                    transcriptContainer.value = finalTranscriptBuffer + interimTranscript;
+                    transcriptContainer.scrollTop = transcriptContainer.scrollHeight;
+                };
+
+                recognition.onerror = (event) => {
+                    console.error('語音識別錯誤:', event.error);
+                     // Avoid restarting on 'no-speech' if paused
+                    if (event.error === 'no-speech' && isRecording && !isPaused) {
+                         console.log('偵測到無語音，嘗試重啟識別...');
+                         // Potentially add a small delay before restarting
+                         // setTimeout(() => { if (isRecording && !isPaused && recognition) recognition.start(); }, 200);
+                     } else if (event.error === 'aborted') {
+                         console.log('語音識別被中止');
+                     } else if (event.error === 'audio-capture') {
+                         alert('麥克風發生問題，請檢查裝置。');
+                         stopRecordingFunction(true); // Force stop on critical error
+                     } else if (event.error !== 'no-speech') { // Don't alert on no-speech
+                         alert(`語音識別錯誤: ${event.error}`);
+                     }
+                };
+
+                recognition.onend = () => {
+                    console.log('語音識別結束');
+                    // Only auto-restart if actively recording and not paused
+                    if (isRecording && !isPaused && recognition && !recognition.manualStop) {
+                        console.log('自動重啟語音識別...');
+                        try {
+                           recognition.start();
+                        } catch (e) {
+                            console.error("重啟識別失敗:", e);
+                            // Maybe alert user or try stopping
+                        }
+                    }
+                    recognition.manualStop = false; // Reset flag
+                };
+            };
+
+            // --- Recording Control Functions ---
+            startButton.addEventListener('click', async () => {
+                if (isRecording) return;
+
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    isRecording = true;
+                    isPaused = false; // Ensure not paused on start
+                    audioChunks = [];
+                    finalTranscriptBuffer = '';
+                    interimTranscript = '';
+
+                    mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+
+                    mediaRecorder.ondataavailable = (event) => {
+                        if (event.data.size > 0) {
+                            audioChunks.push(event.data);
+                        }
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        console.log('MediaRecorder 停止');
+                        isRecording = false; // Mark as not recording anymore
+                        isPaused = false;   // Reset paused state
+
+                        // Create Blob and URL
+                        audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+                        if (audioUrl) URL.revokeObjectURL(audioUrl);
+                        audioUrl = URL.createObjectURL(audioBlob);
+                        audioPlayer.src = audioUrl;
+                        audioSection.classList.remove('hidden');
+
+                        // Setup download
+                        downloadButton.onclick = () => {
+                           try {
+                                saveAs(audioBlob, `錄音_${new Date().toISOString().slice(0,19).replace(/[-:T]/g, '')}.mp3`);
+                            } catch (e) {
+                                console.error("SaveAs 錯誤:", e);
+                                const a = document.createElement('a');
+                                a.href = audioUrl;
+                                a.download = `錄音_${new Date().toISOString().slice(0,19).replace(/[-:T]/g, '')}.mp3`;
+                                document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                            }
+                        };
+
+                         // Stop tracks only after recorder is fully stopped
+                         stream.getTracks().forEach(track => track.stop());
+
+                        // Trigger summary generation if transcript exists
+                        const finalTranscript = transcriptContainer.value.trim();
+                        if (finalTranscript) {
+                            statusIndicator.classList.remove('bg-red-500', 'recording-pulse', 'paused-indicator');
+                            statusIndicator.classList.add('bg-yellow-500');
+                            statusText.textContent = '錄音已結束，正在生成摘要...';
+                            markdownEditor.placeholder = 'AI 正在努力工作中，請稍候...';
+                            generateRealAISummary(finalTranscript);
+                        } else {
+                            statusIndicator.classList.remove('bg-red-500', 'recording-pulse', 'paused-indicator', 'bg-yellow-500');
+                            statusIndicator.classList.add('bg-gray-400');
+                            statusText.textContent = '準備就緒';
+                            markdownEditor.placeholder = '錄音結束，無逐字稿可供摘要。';
+                        }
+                        updateUIState(); // Update buttons to initial state
+                        mediaRecorder = null;
+                    };
+
+                     mediaRecorder.onerror = (event) => {
+                         console.error("MediaRecorder 錯誤:", event.error);
+                         alert(`錄音錯誤: ${event.error.name || event.error}`);
+                         stopRecordingFunction(true); // Force stop on error
+                     };
+
+
+                    mediaRecorder.start(1000); // Trigger dataavailable periodically
+
+                    // Init and start speech recognition
+                    initSpeechRecognition();
+                    recognition.manualStop = false;
+                    recognition.start();
+
+                    // Initial UI update
+                    audioSection.classList.add('hidden');
+                    transcriptContainer.value = '';
+                    markdownEditor.value = '';
+                    markdownEditor.placeholder = '錄音結束後，AI 將生成重點摘要...';
+                    updateUIState(); // Show Pause/Stop buttons
+
+                } catch (err) {
+                    console.error('啟動錄音/識別失敗:', err);
+                    alert('無法啟動錄音或語音識別：' + err.message + '\n請檢查麥克風權限。');
+                    isRecording = false;
+                    isPaused = false;
+                    updateUIState(); // Reset UI
+                    if (recognition) recognition.abort();
+                    if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+                }
+            });
+
+            pauseButton.addEventListener('click', () => {
+                if (!isRecording || isPaused || !mediaRecorder || !recognition) return;
+                console.log('Pausing...');
+                 try {
+                    mediaRecorder.pause();
+                    recognition.manualStop = true; // Prevent automatic restart on pause
+                    recognition.stop();
+                    isPaused = true;
+                    updateUIState(); // Show Resume button, update status
+                 } catch (e) {
+                      console.error("Pause failed:", e);
+                      alert("暫停失敗，請檢查控制台。");
+                 }
+            });
+
+            resumeButton.addEventListener('click', () => {
+                if (!isRecording || !isPaused || !mediaRecorder || !recognition) return;
+                console.log('Resuming...');
+                 try {
+                    mediaRecorder.resume();
+                    recognition.manualStop = false; // Allow automatic restart if needed later
+                    recognition.start(); // Restart recognition
+                    isPaused = false;
+                    updateUIState(); // Show Pause button, update status
+                 } catch(e) {
+                     console.error("Resume failed:", e);
+                      alert("繼續錄音失敗，請檢查控制台。");
+                 }
+            });
+
+            stopButton.addEventListener('click', () => {
+                 stopRecordingFunction();
+            });
+
+             // Encapsulated stop logic
+             function stopRecordingFunction(isError = false) {
+                if (!isRecording || !mediaRecorder) {
+                     console.log("Not recording or recorder inactive, cannot stop.");
+                     // Ensure UI is reset if called unexpectedly
+                     isRecording = false;
+                     isPaused = false;
+                     updateUIState();
+                     return;
+                 }
+
+                 console.log(`Stopping recording... (Error: ${isError})`);
+
+                 // Stop recognition first
+                 if (recognition) {
+                    recognition.manualStop = true; // Mark as manual stop
+                    try {
+                       recognition.stop();
+                    } catch (e) { console.error("Error stopping recognition:", e); }
+                 }
+
+                 // Stop media recorder - the 'onstop' event handles the rest
+                 if (mediaRecorder.state !== 'inactive') {
+                    try {
+                       mediaRecorder.stop();
+                    } catch (e) {
+                        console.error("Error stopping MediaRecorder:", e);
+                        // Fallback UI reset if stop fails catastrophically
+                        isRecording = false;
+                        isPaused = false;
+                        updateUIState();
+                        statusText.textContent = "停止錄音時發生錯誤";
+                    }
+                 } else {
+                     // If already inactive, manually trigger cleanup/UI reset
+                     console.warn("MediaRecorder was already inactive during stop request.");
+                     isRecording = false;
+                     isPaused = false;
+                     updateUIState();
+                     statusText.textContent = "準備就緒 (已停止)";
+                 }
+            }
+
+
+            // --- AI Summary Generation ---
+            async function generateRealAISummary(transcript) {
+                if (!transcript) {
+                    console.log("無逐字稿，取消摘要。");
+                     statusIndicator.classList.remove('bg-yellow-500');
+                     statusIndicator.classList.add('bg-gray-400');
+                     statusText.textContent = '準備就緒';
+                     markdownEditor.placeholder = '無逐字稿可供摘要。';
+                    return;
+                }
+
+                console.log("向 Gemini API 發送請求...");
+                const prompt = `請根據以下逐字稿，生成一份簡潔、重點清晰的摘要，捕捉主要的討論內容、想法、結論或關鍵信息。摘要風格力求自然易懂，使用 Markdown 格式化重點 (例如使用標題、列表)。\n\n逐字稿內容：\n"${transcript}"\n\n摘要 (Markdown 格式)：`;
+
+                // Disable regenerate button during API call
+                regenerateSummaryButton.disabled = true;
+                regenerateSummaryButton.classList.add('opacity-50', 'cursor-not-allowed');
+
+                try {
+                    const response = await fetch(GEMINI_API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ parts: [{ text: prompt }] }],
+                            // Optional: Add safety settings if needed
+                            // safetySettings: [
+                            //   { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+                            //   { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+                            //   { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+                            //   { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
+                            // ],
+                            // Optional: Configure generation parameters
+                            // generationConfig: { temperature: 0.7, maxOutputTokens: 1024 }
+                        }),
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        console.error('Gemini API Error:', errorData);
+                        throw new Error(`API請求失敗: ${response.status} ${response.statusText} - ${errorData?.error?.message || '未知API錯誤'}`);
+                    }
+
+                    const data = await response.json();
+
+                    if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+                        const summaryText = data.candidates[0].content.parts[0].text;
+                        markdownEditor.value = summaryText.trim();
+                        console.log("成功獲取摘要.");
+                        markdownEditor.placeholder = '摘要已生成。'; // Update placeholder on success
+                    } else if (data.candidates && data.candidates[0]?.finishReason === 'SAFETY') {
+                         console.warn('Gemini API Response blocked due to safety settings:', data.candidates[0]?.safetyRatings);
+                         markdownEditor.value = "抱歉，生成的摘要內容因安全考量已被阻止。";
+                         markdownEditor.placeholder = '摘要生成被阻止。';
+                    }
+                    else {
+                        console.error('Gemini API 回應格式不符或無內容:', data);
+                        markdownEditor.value = "抱歉，無法從 API 回應中提取有效的摘要內容。";
+                         markdownEditor.placeholder = '無法獲取摘要。';
+                    }
+
+                } catch (error) {
+                    console.error('調用 Gemini API 時發生錯誤:', error);
+                    markdownEditor.value = `生成摘要時遇到錯誤：\n${error.message}\n\n請檢查 API 金鑰、網路連線或稍後再試。`;
+                    markdownEditor.placeholder = '摘要生成失敗。';
+                } finally {
+                    // Ensure UI returns to ready state regardless of outcome
+                    statusIndicator.classList.remove('bg-yellow-500');
+                    statusIndicator.classList.add('bg-gray-400');
+                    if (!isRecording) { // Only set to ready if not currently recording/paused
+                        statusText.textContent = '準備就緒';
+                    }
+                     // Re-enable regenerate button
+                     regenerateSummaryButton.disabled = false;
+                     regenerateSummaryButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            }
+        });
+    </script>
+    <!-- FileSaver.js for MP3 download -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</body>
+</html>
