@@ -63,23 +63,22 @@
             font-size: 0.875rem;
         }
 
-        /* Base styles for control and file upload buttons */
-        /* Rounded property now applied directly via Tailwind class */
         .control-button, .file-upload-label {
              display: inline-flex;
              align-items: center;
              justify-content: center;
-             font-medium py-2 px-4 transition duration-200 ease-in-out; /* Removed rounded-lg, adjust padding if needed for rounded-full */
+             font-weight: 500;
+             padding-top: 0.5rem; padding-bottom: 0.5rem;
+             padding-left: 1.25rem; padding-right: 1.25rem;
+             transition: all 0.2s ease-in-out;
              cursor: pointer;
              white-space: nowrap;
              color: white;
              border: none;
              outline: none;
-             /* Adjust padding slightly for better look with rounded-full if necessary, e.g., px-5 or px-6 */
-             /* padding-left: 1.25rem; padding-right: 1.25rem; */ /* Example: Equivalent to px-5 */
         }
 
-        .control-button i, .file-upload-label i { margin-right: 0.5rem; /* mr-2 */}
+        .control-button i, .file-upload-label i { margin-right: 0.5rem; }
 
          .control-button:disabled, .file-upload-label:disabled {
              opacity: 0.5;
@@ -89,31 +88,31 @@
         .icon-button {
              background: none;
              border: none;
-             padding: 0.25rem; /* p-1 */
+             padding: 0.25rem;
              cursor: pointer;
              display: inline-flex;
              align-items: center;
              justify-content: center;
-             color: #4f46e5; /* indigo-600 */
+             color: #4f46e5;
              transition: color 0.2s;
-             border-radius: 9999px; /* rounded-full for better hover */
-             outline: none; /* Remove default outline */
+             border-radius: 9999px;
+             outline: none;
         }
         .icon-button:hover:not(:disabled) {
-            color: #3730a3; /* indigo-800 */
-            background-color: #e0e7ff; /* indigo-100 */
+            color: #3730a3;
+            background-color: #e0e7ff;
         }
          .icon-button.danger:hover:not(:disabled) {
-             color: #dc2626; /* red-600 */
-             background-color: #fee2e2; /* red-100 */
+             color: #dc2626;
+             background-color: #fee2e2;
          }
           .icon-button:disabled {
               opacity: 0.5;
               cursor: not-allowed;
           }
         .icon-button svg, .icon-button i {
-            width: 1.25rem; /* w-5 */
-            height: 1.25rem; /* h-5 */
+            width: 1.25rem;
+            height: 1.25rem;
         }
         .tooltip {
           position: relative;
@@ -141,10 +140,87 @@
           visibility: visible;
           opacity: 1;
         }
-        /* Hide default file input */
         input[type="file"] {
             display: none;
         }
+        /* --- New API Key Section Styles --- */
+        .api-key-section {
+            background-color: #eef2ff; /* indigo-50 */
+            border: 1px solid #c7d2fe; /* indigo-200 */
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .api-info-box {
+            padding: 0.75rem;
+            margin-bottom: 1rem;
+            border-radius: 0.375rem;
+            border-left-width: 4px;
+            font-size: 0.9rem;
+        }
+        .api-info-box-info {
+            background-color: #dbeafe; /* blue-100 */
+            border-color: #3b82f6; /* blue-500 */
+            color: #1e3a8a; /* blue-900 */
+        }
+        .api-info-box-warning {
+            background-color: #fef3c7; /* amber-100 */
+            border-color: #f59e0b; /* amber-500 */
+            color: #92400e; /* amber-800 */
+        }
+        .api-label-wrapper {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+        .api-label-wrapper label {
+            font-weight: 500;
+            color: #3730a3; /* indigo-800 */
+        }
+        .api-options {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .api-tutorial-link {
+            color: #3b82f6; /* blue-500 */
+            text-decoration: none;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+        .api-tutorial-link:hover { text-decoration: underline; }
+        #enableBackupKey {
+            color: #6b7280; /* gray-500 */
+            transition: color 0.2s, transform 0.2s;
+            text-decoration: none;
+        }
+        #enableBackupKey:hover { color: #3b82f6; /* blue-500 */ transform: rotate(45deg); }
+        #geminiApiKey {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d1d5db; /* gray-300 */
+            border-radius: 0.375rem;
+            outline: none;
+        }
+        #geminiApiKey:focus {
+            border-color: #4f46e5; /* indigo-600 */
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+        #geminiApiKey:disabled { background-color: #f3f4f6; cursor: not-allowed; opacity: 0.7; }
+
+        /* --- Modal --- */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; animation: fadeInModal 0.3s; }
+        @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+        .modal-content { background: white; padding: 2rem; border-radius: 0.5rem; max-width: 600px; width: 90%; position: relative; max-height: 80vh; overflow-y: auto; }
+        .modal-close { position: absolute; top: 0.75rem; right: 1rem; font-size: 1.75rem; color: #9ca3af; cursor: pointer; transition: color 0.2s; }
+        .modal-close:hover { color: #1f2937; }
+        .modal-content h3 { font-size: 1.5rem; color: #1e3a8a; margin-bottom: 1rem; }
+        .modal-content p, .modal-content li { margin-bottom: 0.75rem; line-height: 1.6; color: #374151; }
+        .modal-content ol { padding-left: 1.25rem; }
+        .modal-content code { background-color: #e5e7eb; padding: 0.125rem 0.25rem; border-radius: 0.25rem; font-family: monospace; }
+        .modal-content a { color: #3b82f6; text-decoration: none; font-weight: 500; }
+        .modal-content a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
@@ -154,7 +230,6 @@
         </h1>
 
         <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
-            <!-- Status Indicator Row -->
             <div class="flex flex-col sm:flex-row items-center justify-between mb-4">
                 <div class="flex items-center mb-2 sm:mb-0">
                     <div id="recordingStatus" class="w-4 h-4 rounded-full bg-gray-400 mr-2 transition-colors duration-300 flex-shrink-0"></div>
@@ -163,45 +238,48 @@
                  <span id="uploadStatus" class="text-sm text-gray-500 h-5"></span>
             </div>
 
-            <!-- Control Buttons Row -->
             <div class="flex flex-wrap items-center justify-center md:justify-between gap-2 mb-6">
-                 <!-- File Upload Section -->
                 <div class="flex items-center space-x-2">
-                     <!-- **** MODIFIED LABEL STYLE (rounded-full) **** -->
                      <label for="audioFileInput"
-                            class="file-upload-label rounded-full bg-emerald-600 hover:bg-emerald-700 focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 px-5"> <!-- Adjusted padding -->
+                            class="file-upload-label rounded-full bg-emerald-600 hover:bg-emerald-700 focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 px-5">
                         <i class="fa-solid fa-upload"></i>上傳音檔
                     </label>
                     <input type="file" id="audioFileInput" accept="audio/*">
                     <span id="fileName" class="text-sm text-gray-600 truncate max-w-xs"></span>
                 </div>
-
-                <!-- Recording Controls -->
                 <div class="flex space-x-2 flex-wrap justify-center">
-                    <!-- **** MODIFIED BUTTON STYLE (rounded-full) **** -->
-                    <button id="startRecording"
-                            class="control-button rounded-full bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 px-5"> <!-- Adjusted padding -->
+                    <button id="startRecording" class="control-button rounded-full bg-indigo-600 hover:bg-indigo-700 focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 px-5">
                         <i class="fa-solid fa-microphone"></i>開始錄音
                     </button>
-                     <!-- **** MODIFIED BUTTON STYLE (rounded-full) **** -->
-                    <button id="pauseRecording"
-                            class="control-button rounded-full bg-amber-500 hover:bg-amber-600 focus:ring-2 focus:ring-offset-2 focus:ring-amber-400 hidden px-5"> <!-- Adjusted padding -->
+                    <button id="pauseRecording" class="control-button rounded-full bg-amber-500 hover:bg-amber-600 focus:ring-2 focus:ring-offset-2 focus:ring-amber-400 hidden px-5">
                         <i class="fa-solid fa-pause"></i>暫停錄音
                     </button>
-                     <!-- **** MODIFIED BUTTON STYLE (rounded-full) **** -->
-                    <button id="resumeRecording"
-                            class="control-button rounded-full bg-emerald-500 hover:bg-emerald-600 focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 hidden px-5"> <!-- Adjusted padding -->
+                    <button id="resumeRecording" class="control-button rounded-full bg-emerald-500 hover:bg-emerald-600 focus:ring-2 focus:ring-offset-2 focus:ring-emerald-400 hidden px-5">
                         <i class="fa-solid fa-play"></i>繼續錄音
                     </button>
-                     <!-- **** MODIFIED BUTTON STYLE (rounded-full) **** -->
-                    <button id="stopRecording"
-                            class="control-button rounded-full bg-red-600 hover:bg-red-700 focus:ring-2 focus:ring-offset-2 focus:ring-red-500 hidden px-5"> <!-- Adjusted padding -->
+                    <button id="stopRecording" class="control-button rounded-full bg-red-600 hover:bg-red-700 focus:ring-2 focus:ring-offset-2 focus:ring-red-500 hidden px-5">
                         <i class="fa-solid fa-stop"></i>停止錄音
                     </button>
                 </div>
             </div>
 
-            <!-- Audio Player Section -->
+            <!-- API Key Section -->
+            <div class="api-key-section">
+                <div class="api-info-box api-info-box-info" id="apiInfoBox">
+                    <p id="apiInfoText">請提供您的 Google Gemini API 金鑰以啟用AI功能 (音檔轉錄 & 重點摘要)。</p>
+                </div>
+                <div class="api-label-wrapper">
+                    <label for="geminiApiKey">您的 API 金鑰 (必填)</label>
+                    <div class="api-options">
+                        <a href="#" class="api-tutorial-link">(如何取得？)</a>
+                        <a href="#" id="enableBackupKey" title="無法取得金鑰？點此啟用備用金鑰">
+                            <i class="fas fa-cog text-xl"></i>
+                        </a>
+                    </div>
+                </div>
+                <input type="text" id="geminiApiKey" placeholder="請貼上您從 Google AI Studio 取得的 API 金鑰">
+            </div>
+
             <div id="audioSection" class="mb-6 hidden">
                 <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
                     <h2 class="text-xl font-semibold mb-3 text-indigo-700">
@@ -210,9 +288,8 @@
                     <audio id="audioPlayer" class="audio-player" controls></audio>
                     <div id="downloadSection" class="flex justify-end mt-3">
                          <div class="tooltip">
-                             <!-- **** MODIFIED BUTTON STYLE (rounded-full) **** -->
                             <button id="downloadButton"
-                                    class="control-button rounded-full bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 flex items-center px-5"> <!-- Adjusted padding -->
+                                    class="control-button rounded-full bg-green-600 hover:bg-green-700 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 flex items-center px-5">
                                 <i class="fa-solid fa-download mr-2"></i>下載 MP3
                             </button>
                             <span class="tooltiptext">下載錄音</span>
@@ -221,9 +298,7 @@
                 </div>
             </div>
 
-            <!-- Transcript & Summary Sections (No changes here) -->
             <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
-                <!-- Transcript Section -->
                 <div class="w-full md:w-1/2">
                     <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 h-full flex flex-col">
                         <div class="flex justify-between items-center mb-3">
@@ -240,8 +315,6 @@
                         <textarea id="transcript" class="transcript-container text-gray-700 flex-grow" placeholder="錄音開始或上傳音檔後，逐字稿將顯示在這裡..."></textarea>
                     </div>
                 </div>
-
-                <!-- Summary Section -->
                 <div class="w-full md:w-1/2">
                     <div class="bg-gray-50 rounded-lg p-4 border border-gray-200 h-full flex flex-col">
                         <div class="flex justify-between items-center mb-3">
@@ -269,7 +342,6 @@
             </div>
         </div>
 
-        <!-- Instructions Section (No changes here) -->
         <div class="bg-white rounded-lg shadow-lg p-6">
             <h2 class="text-xl font-semibold mb-4 text-indigo-700">
                <i class="fa-solid fa-circle-info mr-2"></i>操作說明
@@ -277,52 +349,69 @@
             <ul class="list-disc pl-5 text-gray-700 space-y-2">
                 <li><b>即時錄音：</b>點擊 <i class="fa-solid fa-microphone text-indigo-600"></i> 開始錄音。系統將自動轉錄語音並顯示在 <i class="fa-solid fa-file-lines text-indigo-600"></i> 逐字稿區域。</li>
                 <li><b>上傳音檔：</b>點擊 <i class="fa-solid fa-upload text-emerald-500"></i> 上傳音檔按鈕，選擇您裝置上的音訊檔案 (如 MP3, WAV, M4A 等)。</li>
-                <li>系統會上傳並處理檔案，完成後逐字稿會顯示在 <i class="fa-solid fa-file-lines text-indigo-600"></i> 區域。</li>
+                <li>系統會上傳並處理檔案，完成後逐字稿會顯示在 <i class="fa-solid fa-file-lines text-indigo-600"></i> 區域。(此功能需提供 API 金鑰)</li>
                 <li><b>錄音控制：</b>錄音中可點擊 <i class="fa-solid fa-pause text-amber-500"></i> 暫停，再點擊 <i class="fa-solid fa-play text-emerald-500"></i> 繼續。點擊 <i class="fa-solid fa-stop text-red-600"></i> 停止錄音。</li>
-                <li><b>重點摘要：</b>錄音停止或檔案轉錄完成後，AI 會自動生成 <i class="fa-solid fa-brain text-indigo-600"></i> 重點摘要。</li>
+                <li><b>重點摘要：</b>錄音停止或檔案轉錄完成後，AI 會自動生成 <i class="fa-solid fa-brain text-indigo-600"></i> 重點摘要。(此功能需提供 API 金鑰)</li>
                  <li><b>編輯與重整：</b>您可以隨時編輯逐字稿內容，然後點擊 <i class="fa-solid fa-arrows-rotate text-indigo-600"></i> 按鈕，根據目前的逐字稿重新生成摘要。</li>
                  <li><b>複製與下載：</b>使用 <i class="fa-regular fa-copy text-indigo-600"></i> 按鈕複製逐字稿或摘要。在 <i class="fa-solid fa-circle-play text-indigo-600"></i> 音檔播放區可以播放音檔，若是即時錄製的音檔，可點擊 <i class="fa-solid fa-download text-green-600"></i> 下載 MP3。</li>
                  <li><b>注意：</b>檔案上傳與轉錄可能需要一些時間，具體取決於檔案大小和網路速度。處理期間請稍候。</li>
             </ul>
         </div>
 
-        <!-- Footer (No changes here) -->
         <div class="footer">
             <p>Copyright © Liyuchiutiger Gongminshen</p>
         </div>
     </div>
+    
+    <!-- Modal for API Key Tutorial -->
+    <div class="modal-overlay" id="api-key-modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h3>如何取得免費的 Google Gemini API 金鑰？</h3>
+            <p>按照以下簡單步驟，即可取得您自己的免費金鑰，享受更穩定、個人化的服務。</p>
+            <ol>
+                <li>前往 <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio 的 API 金鑰頁面</a>。</li>
+                <li>使用您的 Google 帳號登入。</li>
+                <li>點擊頁面上的 <strong>「建立 API 金鑰」(Create API key)</strong> 按鈕。</li>
+                <li>系統會立即產生一組新的金鑰。點擊金鑰旁邊的複製圖示。</li>
+                <li>回到本頁面，將複製的金鑰貼到輸入框中即可！</li>
+            </ol>
+            <p><strong>提醒：</strong>請妥善保管您的 API 金鑰，不要與他人分享。</p>
+        </div>
+    </div>
 
-    <!-- JavaScript (No changes here) -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // --- DOM Elements ---
-            const startButton = document.getElementById('startRecording');
-            const stopButton = document.getElementById('stopRecording');
-            const pauseButton = document.getElementById('pauseRecording');
-            const resumeButton = document.getElementById('resumeRecording');
-            const statusIndicator = document.getElementById('recordingStatus');
-            const statusText = document.getElementById('statusText');
-            const uploadStatus = document.getElementById('uploadStatus');
-            const transcriptContainer = document.getElementById('transcript');
-            const markdownEditor = document.getElementById('markdownEditor');
-            const audioSection = document.getElementById('audioSection');
-            const audioPlayer = document.getElementById('audioPlayer');
-            const downloadSection = document.getElementById('downloadSection');
-            const downloadButton = document.getElementById('downloadButton');
-            const copyMarkdownButton = document.getElementById('copyMarkdown');
-            const copyTranscriptButton = document.getElementById('copyTranscript');
-            const regenerateSummaryButton = document.getElementById('regenerateSummary');
-            const audioFileInput = document.getElementById('audioFileInput');
-            const fileNameDisplay = document.getElementById('fileName');
+            const dom = {
+                startButton: document.getElementById('startRecording'),
+                stopButton: document.getElementById('stopRecording'),
+                pauseButton: document.getElementById('pauseRecording'),
+                resumeButton: document.getElementById('resumeRecording'),
+                statusIndicator: document.getElementById('recordingStatus'),
+                statusText: document.getElementById('statusText'),
+                uploadStatus: document.getElementById('uploadStatus'),
+                transcriptContainer: document.getElementById('transcript'),
+                markdownEditor: document.getElementById('markdownEditor'),
+                audioSection: document.getElementById('audioSection'),
+                audioPlayer: document.getElementById('audioPlayer'),
+                downloadSection: document.getElementById('downloadSection'),
+                downloadButton: document.getElementById('downloadButton'),
+                copyMarkdownButton: document.getElementById('copyMarkdown'),
+                copyTranscriptButton: document.getElementById('copyTranscript'),
+                regenerateSummaryButton: document.getElementById('regenerateSummary'),
+                audioFileInput: document.getElementById('audioFileInput'),
+                fileNameDisplay: document.getElementById('fileName'),
+                apiKeyInput: document.getElementById('geminiApiKey'),
+                apiInfoBox: document.getElementById('apiInfoBox'),
+                apiInfoText: document.getElementById('apiInfoText'),
+                enableBackupKey: document.getElementById('enableBackupKey'),
+                apiKeyModal: document.getElementById('api-key-modal'),
+                openApiKeyModalLink: document.querySelector('.api-tutorial-link')
+            };
 
-            // --- API Configuration ---
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            // !!! 安全警告：將 API 金鑰直接寫在前端極度不安全 !!!
-            // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            const GEMINI_API_KEY = 'AIzaSyCerlnUOTQ4-5K6VRpugpRI1URcOF6ai2w'; // <--- 極度不安全！
-            const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${GEMINI_API_KEY}`;
+            const BACKUP_API_KEY = 'AIzaSyCerlnUOTQ4-5K6VRpugpRI1URcOF6ai2w';
+            let isBackupKeyEnabled = false;
 
-            // --- State Variables ---
             let mediaRecorder;
             let audioChunks = [];
             let recognition;
@@ -334,22 +423,25 @@
             let isPaused = false;
             let isProcessingFile = false;
 
-             // --- Helper Functions ---
+            const getActiveApiKey = () => {
+                if (isBackupKeyEnabled) return BACKUP_API_KEY;
+                return dom.apiKeyInput.value.trim();
+            };
+
              function setProcessingState(isProcessing, message = '') {
                 isProcessingFile = isProcessing;
-                uploadStatus.textContent = message;
-                startButton.disabled = isProcessing;
-                audioFileInput.disabled = isProcessing;
+                dom.uploadStatus.textContent = message;
+                dom.startButton.disabled = isProcessing;
+                dom.audioFileInput.disabled = isProcessing;
                 const fileUploadLabel = document.querySelector('label[for="audioFileInput"]');
                 fileUploadLabel.classList.toggle('opacity-50', isProcessing);
                 fileUploadLabel.classList.toggle('cursor-not-allowed', isProcessing);
 
                  if (isProcessing) {
-                     statusIndicator.classList.remove('bg-gray-400', 'bg-red-500', 'recording-pulse', 'paused-indicator', 'bg-yellow-500');
-                     statusIndicator.classList.add('processing-indicator');
-                     statusText.textContent = '處理檔案中...';
+                     dom.statusIndicator.className = 'w-4 h-4 rounded-full mr-2 transition-colors duration-300 flex-shrink-0 processing-indicator';
+                     dom.statusText.textContent = '處理檔案中...';
                  } else {
-                     statusIndicator.classList.remove('processing-indicator');
+                     dom.statusIndicator.classList.remove('processing-indicator');
                      updateUIState();
                  }
              }
@@ -370,200 +462,130 @@
                  if (isProcessingFile) return;
 
                  if (isRecording) {
-                    startButton.classList.add('hidden');
-                    stopButton.classList.remove('hidden');
-                    stopButton.disabled = false;
+                    dom.startButton.classList.add('hidden');
+                    dom.stopButton.classList.remove('hidden');
+                    dom.stopButton.disabled = false;
                     if (isPaused) {
-                        statusIndicator.classList.remove('bg-red-500', 'recording-pulse', 'processing-indicator', 'bg-yellow-500');
-                        statusIndicator.classList.add('paused-indicator');
-                        statusText.textContent = '錄音已暫停';
-                        pauseButton.classList.add('hidden');
-                        resumeButton.classList.remove('hidden');
-                        resumeButton.disabled = false;
+                        dom.statusIndicator.className = 'w-4 h-4 rounded-full mr-2 transition-colors duration-300 flex-shrink-0 paused-indicator';
+                        dom.statusText.textContent = '錄音已暫停';
+                        dom.pauseButton.classList.add('hidden');
+                        dom.resumeButton.classList.remove('hidden');
+                        dom.resumeButton.disabled = false;
                     } else {
-                        statusIndicator.classList.remove('paused-indicator', 'processing-indicator', 'bg-yellow-500');
-                        statusIndicator.classList.add('bg-red-500', 'recording-pulse');
-                        statusText.textContent = '錄音中...';
-                        pauseButton.classList.remove('hidden');
-                        pauseButton.disabled = false;
-                        resumeButton.classList.add('hidden');
+                        dom.statusIndicator.className = 'w-4 h-4 rounded-full mr-2 transition-colors duration-300 flex-shrink-0 bg-red-500 recording-pulse';
+                        dom.statusText.textContent = '錄音中...';
+                        dom.pauseButton.classList.remove('hidden');
+                        dom.pauseButton.disabled = false;
+                        dom.resumeButton.classList.add('hidden');
                     }
-                     audioFileInput.disabled = true;
+                     dom.audioFileInput.disabled = true;
                      document.querySelector('label[for="audioFileInput"]').classList.add('opacity-50', 'cursor-not-allowed');
                  } else {
-                    startButton.classList.remove('hidden');
-                    startButton.disabled = !browserSupportsLiveRecording;
-                    stopButton.classList.add('hidden');
-                    pauseButton.classList.add('hidden');
-                    resumeButton.classList.add('hidden');
-                    statusIndicator.classList.remove('bg-red-500', 'recording-pulse', 'paused-indicator', 'bg-yellow-500', 'processing-indicator');
-                    statusIndicator.classList.add('bg-gray-400');
-                     if (!statusText.textContent.includes('完成') && !statusText.textContent.includes('錯誤') && !statusText.textContent.includes('生成') && !statusText.textContent.includes('停止') && !statusText.textContent.includes('中止') && !statusText.textContent.includes('阻止')) {
-                          statusText.textContent = '準備就緒';
+                    dom.startButton.classList.remove('hidden');
+                    dom.startButton.disabled = !browserSupportsLiveRecording;
+                    dom.stopButton.classList.add('hidden');
+                    dom.pauseButton.classList.add('hidden');
+                    dom.resumeButton.classList.add('hidden');
+                    dom.statusIndicator.className = 'w-4 h-4 rounded-full mr-2 transition-colors duration-300 flex-shrink-0 bg-gray-400';
+                     if (!dom.statusText.textContent.includes('完成') && !dom.statusText.textContent.includes('錯誤') && !dom.statusText.textContent.includes('生成') && !dom.statusText.textContent.includes('停止') && !dom.statusText.textContent.includes('中止') && !dom.statusText.textContent.includes('阻止')) {
+                          dom.statusText.textContent = '準備就緒';
                      }
-                     audioFileInput.disabled = false;
+                     dom.audioFileInput.disabled = false;
                      document.querySelector('label[for="audioFileInput"]').classList.remove('opacity-50', 'cursor-not-allowed');
                  }
 
-                 regenerateSummaryButton.disabled = transcriptContainer.value.trim().length === 0;
-                 regenerateSummaryButton.classList.toggle('opacity-50', regenerateSummaryButton.disabled);
-                 regenerateSummaryButton.classList.toggle('cursor-not-allowed', regenerateSummaryButton.disabled);
-
-                 copyTranscriptButton.disabled = transcriptContainer.value.trim().length === 0;
-                 copyTranscriptButton.classList.toggle('opacity-50', copyTranscriptButton.disabled);
-                 copyTranscriptButton.classList.toggle('cursor-not-allowed', copyTranscriptButton.disabled);
-
-                 copyMarkdownButton.disabled = markdownEditor.value.trim().length === 0;
-                 copyMarkdownButton.classList.toggle('opacity-50', copyMarkdownButton.disabled);
-                 copyMarkdownButton.classList.toggle('cursor-not-allowed', copyMarkdownButton.disabled);
+                 dom.regenerateSummaryButton.disabled = dom.transcriptContainer.value.trim().length === 0;
+                 dom.copyTranscriptButton.disabled = dom.transcriptContainer.value.trim().length === 0;
+                 dom.copyMarkdownButton.disabled = dom.markdownEditor.value.trim().length === 0;
             }
 
 
             // --- Event Listeners ---
-            copyTranscriptButton.addEventListener('click', () => {
-                if (!transcriptContainer.value) return;
-                navigator.clipboard.writeText(transcriptContainer.value).then(() => {
-                    showCopySuccess(copyTranscriptButton, "複製逐字稿", `<i class="fa-solid fa-check text-green-600"></i>`, `<i class="fa-regular fa-copy"></i>`);
+            dom.copyTranscriptButton.addEventListener('click', () => {
+                if (!dom.transcriptContainer.value) return;
+                navigator.clipboard.writeText(dom.transcriptContainer.value).then(() => {
+                    showCopySuccess(dom.copyTranscriptButton, "複製逐字稿", `<i class="fa-solid fa-check text-green-600"></i>`, `<i class="fa-regular fa-copy"></i>`);
                 }).catch(err => console.error('無法複製逐字稿:', err));
             });
 
-            copyMarkdownButton.addEventListener('click', () => {
-                if (!markdownEditor.value) return;
-                navigator.clipboard.writeText(markdownEditor.value).then(() => {
-                     showCopySuccess(copyMarkdownButton, "複製摘要", `<i class="fa-solid fa-check text-green-600"></i>`, `<i class="fa-regular fa-copy"></i>`);
+            dom.copyMarkdownButton.addEventListener('click', () => {
+                if (!dom.markdownEditor.value) return;
+                navigator.clipboard.writeText(dom.markdownEditor.value).then(() => {
+                     showCopySuccess(dom.copyMarkdownButton, "複製摘要", `<i class="fa-solid fa-check text-green-600"></i>`, `<i class="fa-regular fa-copy"></i>`);
                 }).catch(err => console.error('無法複製摘要:', err));
             });
 
-            regenerateSummaryButton.addEventListener('click', () => {
-                const currentTranscript = transcriptContainer.value.trim();
-                if (!currentTranscript) {
-                    alert("逐字稿是空的，無法生成摘要。");
+            dom.regenerateSummaryButton.addEventListener('click', () => {
+                const currentTranscript = dom.transcriptContainer.value.trim();
+                if (!currentTranscript) { alert("逐字稿是空的，無法生成摘要。"); return; }
+                if (isRecording && !isPaused) { alert("請先暫停或停止錄音，再重新生成摘要。"); return; }
+                if (isProcessingFile) { alert("正在處理上傳的檔案，請稍後再重新生成摘要。"); return; }
+                
+                const apiKey = getActiveApiKey();
+                if (!apiKey) {
+                    alert("請提供您的 API 金鑰以生成摘要。");
+                    dom.apiKeyInput.focus();
                     return;
                 }
-                 if (isRecording && !isPaused) {
-                     alert("請先暫停或停止錄音，再重新生成摘要。");
-                     return;
-                 }
-                  if (isProcessingFile) {
-                     alert("正在處理上傳的檔案，請稍後再重新生成摘要。");
-                     return;
-                 }
 
-                markdownEditor.placeholder = 'AI 正在努力工作中，請稍候...';
-                markdownEditor.value = '';
-                generateRealAISummary(currentTranscript);
+                dom.markdownEditor.placeholder = 'AI 正在努力工作中，請稍候...';
+                dom.markdownEditor.value = '';
+                generateRealAISummary(currentTranscript, apiKey);
             });
 
-            // --- File Upload Handling ---
-            audioFileInput.addEventListener('change', (event) => {
+            dom.audioFileInput.addEventListener('change', (event) => {
                 const file = event.target.files[0];
-                if (!file) {
-                    fileNameDisplay.textContent = '';
-                    if (isProcessingFile) {
-                         setProcessingState(false, '');
-                    }
-                    updateUIState();
+                if (!file) { dom.fileNameDisplay.textContent = ''; if (isProcessingFile) { setProcessingState(false, ''); } updateUIState(); return; }
+                if (!file.type.startsWith('audio/')) { alert('請選擇一個有效的音訊檔案 (例如 MP3, WAV, M4A, OGG)。'); dom.fileNameDisplay.textContent = ''; dom.audioFileInput.value = ''; if (isProcessingFile) setProcessingState(false, '檔案格式不支援'); updateUIState(); return; }
+                const maxSizeMB = 50;
+                if (file.size > maxSizeMB * 1024 * 1024) { alert(`檔案大小超過 ${maxSizeMB}MB 限制，請選擇較小的檔案。`); dom.fileNameDisplay.textContent = ''; dom.audioFileInput.value = ''; if (isProcessingFile) setProcessingState(false, '檔案過大'); updateUIState(); return; }
+                
+                const apiKey = getActiveApiKey();
+                if (!apiKey) {
+                    alert("請提供您的 API 金鑰才能上傳並轉錄音檔。");
+                    dom.audioFileInput.value = '';
+                    dom.fileNameDisplay.textContent = '';
+                    dom.apiKeyInput.focus();
                     return;
                 }
 
-                if (!file.type.startsWith('audio/')) {
-                    alert('請選擇一個有效的音訊檔案 (例如 MP3, WAV, M4A, OGG)。');
-                    fileNameDisplay.textContent = '';
-                    audioFileInput.value = '';
-                    if (isProcessingFile) setProcessingState(false, '檔案格式不支援');
-                    updateUIState();
-                    return;
-                }
+                if (isRecording) { console.log("自動停止錄音以處理上傳檔案..."); stopRecordingFunction(false, true); }
 
-                 const maxSizeMB = 50;
-                 if (file.size > maxSizeMB * 1024 * 1024) {
-                     alert(`檔案大小超過 ${maxSizeMB}MB 限制，請選擇較小的檔案。`);
-                     fileNameDisplay.textContent = '';
-                     audioFileInput.value = '';
-                      if (isProcessingFile) setProcessingState(false, '檔案過大');
-                     updateUIState();
-                     return;
-                 }
-
-                if (isRecording) {
-                     console.log("自動停止錄音以處理上傳檔案...");
-                     stopRecordingFunction(false, true);
-                }
-
-                fileNameDisplay.textContent = file.name;
+                dom.fileNameDisplay.textContent = file.name;
                 setProcessingState(true, '正在讀取檔案...');
-                transcriptContainer.value = '';
-                markdownEditor.value = '';
-                markdownEditor.placeholder = '音檔處理中...';
-
+                dom.transcriptContainer.value = '';
+                dom.markdownEditor.value = '';
+                dom.markdownEditor.placeholder = '音檔處理中...';
                 const reader = new FileReader();
-
                 reader.onloadend = () => {
-                    if (reader.error) {
-                         console.error("檔案讀取錯誤:", reader.error);
-                         alert(`讀取檔案時發生錯誤: ${reader.error.message}`);
-                         setProcessingState(false, '檔案讀取失敗');
-                         fileNameDisplay.textContent = '';
-                         audioFileInput.value = '';
-                         updateUIState();
-                         return;
-                    }
+                    if (reader.error) { console.error("檔案讀取錯誤:", reader.error); alert(`讀取檔案時發生錯誤: ${reader.error.message}`); setProcessingState(false, '檔案讀取失敗'); dom.fileNameDisplay.textContent = ''; dom.audioFileInput.value = ''; updateUIState(); return; }
                     try {
                         const base64String = reader.result.split(',')[1];
                         const mimeType = file.type;
-
                         if (audioUrl) URL.revokeObjectURL(audioUrl);
                         audioUrl = URL.createObjectURL(file);
-                        audioPlayer.src = audioUrl;
-                        audioSection.classList.remove('hidden');
-                        downloadSection.classList.add('hidden');
-
-                        transcribeAudioFile(base64String, mimeType);
-
-                    } catch (e) {
-                        console.error("處理檔案 Data URL 失敗:", e);
-                        alert(`處理檔案時發生錯誤: ${e.message}`);
-                        setProcessingState(false, '檔案處理失敗');
-                        fileNameDisplay.textContent = '';
-                        audioFileInput.value = '';
-                        updateUIState();
-                    }
+                        dom.audioPlayer.src = audioUrl;
+                        dom.audioSection.classList.remove('hidden');
+                        dom.downloadSection.classList.add('hidden');
+                        transcribeAudioFile(base64String, mimeType, apiKey);
+                    } catch (e) { console.error("處理檔案 Data URL 失敗:", e); alert(`處理檔案時發生錯誤: ${e.message}`); setProcessingState(false, '檔案處理失敗'); dom.fileNameDisplay.textContent = ''; dom.audioFileInput.value = ''; updateUIState(); }
                 };
-
-                reader.onerror = (err) => {
-                    console.error("FileReader 錯誤:", err);
-                    alert('讀取檔案時發生錯誤。');
-                    setProcessingState(false, '檔案讀取錯誤');
-                    fileNameDisplay.textContent = '';
-                    audioFileInput.value = '';
-                    updateUIState();
-                };
-
+                reader.onerror = (err) => { console.error("FileReader 錯誤:", err); alert('讀取檔案時發生錯誤。'); setProcessingState(false, '檔案讀取錯誤'); dom.fileNameDisplay.textContent = ''; dom.audioFileInput.value = ''; updateUIState(); };
                 reader.readAsDataURL(file);
             });
 
-            // --- Browser Support Check ---
             const browserSupportsLiveRecording = ('webkitSpeechRecognition' in window) && navigator.mediaDevices && navigator.mediaDevices.getUserMedia;
             if (!browserSupportsLiveRecording) {
-                 startButton.disabled = true;
-                 startButton.title = '您的瀏覽器不支援即時錄音功能';
-                 startButton.classList.add('opacity-50', 'cursor-not-allowed');
+                 dom.startButton.disabled = true;
+                 dom.startButton.title = '您的瀏覽器不支援即時錄音功能';
+                 dom.startButton.classList.add('opacity-50', 'cursor-not-allowed');
                  console.warn('瀏覽器不支援 Web Speech API 或 getUserMedia，即時錄音功能已停用。');
             }
 
-            // --- Speech Recognition Setup (for live recording) ---
             const initSpeechRecognition = () => {
                 if (!browserSupportsLiveRecording || recognition) return;
-
                 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                if (!SpeechRecognition) {
-                    console.error("Speech Recognition API not supported in this browser.");
-                    startButton.disabled = true;
-                    startButton.title = '您的瀏覽器不支援語音識別 API';
-                    startButton.classList.add('opacity-50', 'cursor-not-allowed');
-                    return;
-                }
-
+                if (!SpeechRecognition) { console.error("Speech Recognition API not supported in this browser."); dom.startButton.disabled = true; dom.startButton.title = '您的瀏覽器不支援語音識別 API'; dom.startButton.classList.add('opacity-50', 'cursor-not-allowed'); return; }
                 recognition = new SpeechRecognition();
                 recognition.continuous = true;
                 recognition.interimResults = true;
@@ -571,39 +593,25 @@
 
                 recognition.onresult = (event) => {
                     if (isProcessingFile || isPaused) return;
-
                     let currentInterim = '';
                     for (let i = event.resultIndex; i < event.results.length; ++i) {
-                        if (event.results[i].isFinal) {
-                            finalTranscriptBuffer += event.results[i][0].transcript.trim() + ' ';
-                        } else {
-                            currentInterim += event.results[i][0].transcript;
-                        }
+                        if (event.results[i].isFinal) { finalTranscriptBuffer += event.results[i][0].transcript.trim() + ' '; }
+                        else { currentInterim += event.results[i][0].transcript; }
                     }
                     interimTranscript = currentInterim;
-                    transcriptContainer.value = finalTranscriptBuffer + interimTranscript;
-                    transcriptContainer.scrollTop = transcriptContainer.scrollHeight;
+                    dom.transcriptContainer.value = finalTranscriptBuffer + interimTranscript;
+                    dom.transcriptContainer.scrollTop = dom.transcriptContainer.scrollHeight;
                     updateUIState();
                 };
 
                 recognition.onerror = (event) => {
                     console.error('語音識別錯誤:', event.error);
-                    if (event.error === 'no-speech' && isRecording && !isPaused) {
-                         console.log('偵測到無語音，可能需要重啟識別。');
-                     } else if (event.error === 'aborted') {
-                         console.log('語音識別被中止 (手動停止或API內部中止)');
-                     } else if (event.error === 'audio-capture') {
-                         alert('麥克風發生問題，請檢查裝置。即時錄音已停止。');
-                         stopRecordingFunction(true);
-                     } else if (event.error === 'network') {
-                         alert('網路問題導致語音識別失敗，請檢查網路連線。');
-                         stopRecordingFunction(true);
-                     } else if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-                         alert('麥克風權限被拒絕或語音識別服務不可用。即時錄音已停止。');
-                         stopRecordingFunction(true);
-                     } else {
-                         console.warn(`Unhandled Speech Recognition Error: ${event.error}`);
-                     }
+                    if (event.error === 'no-speech' && isRecording && !isPaused) { console.log('偵測到無語音，可能需要重啟識別。'); }
+                    else if (event.error === 'aborted') { console.log('語音識別被中止 (手動停止或API內部中止)'); }
+                    else if (event.error === 'audio-capture') { alert('麥克風發生問題，請檢查裝置。即時錄音已停止。'); stopRecordingFunction(true); }
+                    else if (event.error === 'network') { alert('網路問題導致語音識別失敗，請檢查網路連線。'); stopRecordingFunction(true); }
+                    else if (event.error === 'not-allowed' || event.error === 'service-not-allowed') { alert('麥克風權限被拒絕或語音識別服務不可用。即時錄音已停止。'); stopRecordingFunction(true); }
+                    else { console.warn(`Unhandled Speech Recognition Error: ${event.error}`); }
                 };
 
                 recognition.onend = () => {
@@ -611,552 +619,167 @@
                     if (isRecording && !isPaused && recognition && !recognition.manualStop && !isProcessingFile) {
                         console.log('自動重啟語音識別...');
                         try {
-                            setTimeout(() => {
-                                if (isRecording && !isPaused && recognition && !recognition.manualStop && !isProcessingFile) {
-                                    console.log('Attempting recognition restart now.');
-                                    recognition.start();
-                                } else {
-                                     console.log('Auto-restart condition no longer met.');
-                                }
-                            }, 500);
-                        } catch (e) {
-                            console.error("重啟識別失敗:", e);
-                            if (e.name === 'InvalidStateError') {
-                                console.warn("無法在當前狀態下重啟識別。");
-                                if (isRecording && !isProcessingFile) {
-                                     alert('無法自動重啟語音識別，錄音將繼續但可能無法即時轉錄。');
-                                }
-                            } else {
-                                console.error("其他重啟錯誤:", e);
-                            }
-                        }
-                    } else {
-                         console.log(`Speech recognition ended (isRecording: ${isRecording}, isPaused: ${isPaused}, manualStop: ${recognition?.manualStop}, isProcessingFile: ${isProcessingFile})`);
-                    }
+                            setTimeout(() => { if (isRecording && !isPaused && recognition && !recognition.manualStop && !isProcessingFile) { console.log('Attempting recognition restart now.'); recognition.start(); } else { console.log('Auto-restart condition no longer met.'); } }, 500);
+                        } catch (e) { console.error("重啟識別失敗:", e); if (e.name === 'InvalidStateError') { console.warn("無法在當前狀態下重啟識別。"); if (isRecording && !isProcessingFile) { alert('無法自動重啟語音識別，錄音將繼續但可能無法即時轉錄。'); } } else { console.error("其他重啟錯誤:", e); } }
+                    } else { console.log(`Speech recognition ended (isRecording: ${isRecording}, isPaused: ${isPaused}, manualStop: ${recognition?.manualStop}, isProcessingFile: ${isProcessingFile})`); }
                     if(recognition) recognition.manualStop = false;
                 };
                 window.speechRecognitionInstance = recognition;
             };
 
-            // --- Recording Control Functions ---
-            startButton.addEventListener('click', async () => {
+            dom.startButton.addEventListener('click', async () => {
                 if (isRecording || isProcessingFile) return;
-                 if (!browserSupportsLiveRecording) {
-                     alert('您的瀏覽器不支援即時錄音功能。');
-                     return;
-                 }
-
+                 if (!browserSupportsLiveRecording) { alert('您的瀏覽器不支援即時錄音功能。'); return; }
                 try {
-                    transcriptContainer.value = '';
-                    markdownEditor.value = '';
-                    markdownEditor.placeholder = '錄音結束後，AI 將生成重點摘要...';
-                    audioSection.classList.add('hidden');
-                    downloadSection.classList.add('hidden');
-                    fileNameDisplay.textContent = '';
-                    audioFileInput.value = '';
-
+                    dom.transcriptContainer.value = ''; dom.markdownEditor.value = '';
+                    dom.markdownEditor.placeholder = '錄音結束後，AI 將生成重點摘要...';
+                    dom.audioSection.classList.add('hidden'); dom.downloadSection.classList.add('hidden');
+                    dom.fileNameDisplay.textContent = ''; dom.audioFileInput.value = '';
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    isRecording = true;
-                    isPaused = false;
-                    audioChunks = [];
-                    finalTranscriptBuffer = '';
-                    interimTranscript = '';
-                    if (audioUrl) URL.revokeObjectURL(audioUrl);
-                    audioUrl = null;
-                    audioBlob = null;
-
+                    isRecording = true; isPaused = false;
+                    audioChunks = []; finalTranscriptBuffer = ''; interimTranscript = '';
+                    if (audioUrl) URL.revokeObjectURL(audioUrl); audioUrl = null; audioBlob = null;
                     let options = { mimeType: 'audio/webm;codecs=opus' };
-                    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                        options = { mimeType: 'audio/webm' };
-                        if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                            options = { mimeType: 'audio/ogg;codecs=opus' };
-                            if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                                options = { mimeType: 'audio/ogg' };
-                                if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-                                     console.warn("Opus/Webm/Ogg not fully supported, trying default...");
-                                     options = {};
-                                }
-                            }
-                        }
-                    }
+                    if (!MediaRecorder.isTypeSupported(options.mimeType)) { options = { mimeType: 'audio/webm' }; if (!MediaRecorder.isTypeSupported(options.mimeType)) { options = { mimeType: 'audio/ogg;codecs=opus' }; if (!MediaRecorder.isTypeSupported(options.mimeType)) { options = { mimeType: 'audio/ogg' }; if (!MediaRecorder.isTypeSupported(options.mimeType)) { console.warn("Opus/Webm/Ogg not fully supported, trying default..."); options = {}; }}}}
                      console.log("Using MediaRecorder options:", options);
-
                     mediaRecorder = new MediaRecorder(stream, options);
-
-                    mediaRecorder.ondataavailable = (event) => {
-                        if (event.data.size > 0) {
-                            audioChunks.push(event.data);
-                        }
-                    };
-
+                    mediaRecorder.ondataavailable = (event) => { if (event.data.size > 0) { audioChunks.push(event.data); } };
                     mediaRecorder.onstop = () => {
                         console.log('MediaRecorder 停止');
-                        const wasRecording = isRecording;
-                        isRecording = false;
-                        isPaused = false;
-
-                        if (stream && stream.getTracks) {
-                           stream.getTracks().forEach(track => track.stop());
-                           console.log('Stream tracks stopped.');
-                        } else {
-                            console.warn("Could not stop stream tracks.");
-                        }
-
+                        const wasRecording = isRecording; isRecording = false; isPaused = false;
+                        if (stream && stream.getTracks) { stream.getTracks().forEach(track => track.stop()); console.log('Stream tracks stopped.'); } else { console.warn("Could not stop stream tracks."); }
                         if (audioChunks.length > 0) {
                            const recordedMimeType = audioChunks[0].type || options.mimeType || 'audio/webm;codecs=opus';
-                           console.log("Recorded MIME Type (from chunks/options):", recordedMimeType);
-
+                           console.log("Recorded MIME Type:", recordedMimeType);
                            audioBlob = new Blob(audioChunks, { type: recordedMimeType });
-
-                            if (audioUrl) URL.revokeObjectURL(audioUrl);
-                            audioUrl = URL.createObjectURL(audioBlob);
-                            audioPlayer.src = audioUrl;
-                            audioSection.classList.remove('hidden');
-                            downloadSection.classList.remove('hidden');
-
-                            downloadButton.onclick = () => {
-                                try {
-                                    saveAs(audioBlob, `錄音_${new Date().toISOString().slice(0,19).replace(/[-:T]/g, '')}.mp3`);
-                                } catch (e) {
-                                    console.error("FileSaver saveAs 錯誤:", e);
-                                    const a = document.createElement('a');
-                                    a.style.display = 'none';
-                                    a.href = audioUrl;
-                                     let extension = '.webm';
-                                     if (recordedMimeType.includes('ogg')) extension = '.ogg';
-                                     if (recordedMimeType.includes('mp4')) extension = '.mp4';
-                                     if (!extension && recordedMimeType.includes('audio')) extension = '.audio';
-                                     if (!extension) extension = '.bin';
-                                     a.download = `錄音_${new Date().toISOString().slice(0,19).replace(/[-:T]/g, '')}${extension}`;
-                                    document.body.appendChild(a);
-                                    a.click();
-                                    window.URL.revokeObjectURL(a.href);
-                                    document.body.removeChild(a);
-                                }
-                            };
-                        } else {
-                            console.log("No audio chunks recorded.");
-                            audioSection.classList.add('hidden');
-                            downloadSection.classList.add('hidden');
-                        }
-
-                        mediaRecorder = null;
-                        audioChunks = [];
-
-                        const finalTranscript = transcriptContainer.value.trim();
+                            if (audioUrl) URL.revokeObjectURL(audioUrl); audioUrl = URL.createObjectURL(audioBlob);
+                            dom.audioPlayer.src = audioUrl; dom.audioSection.classList.remove('hidden'); dom.downloadSection.classList.remove('hidden');
+                            dom.downloadButton.onclick = () => { try { saveAs(audioBlob, `錄音_${new Date().toISOString().slice(0,19).replace(/[-:T]/g, '')}.mp3`); } catch (e) { console.error("FileSaver saveAs 錯誤:", e); const a = document.createElement('a'); a.style.display = 'none'; a.href = audioUrl; let extension = '.webm'; if (recordedMimeType.includes('ogg')) extension = '.ogg'; if (recordedMimeType.includes('mp4')) extension = '.mp4'; a.download = `錄音_${new Date().toISOString().slice(0,19).replace(/[-:T]/g, '')}${extension}`; document.body.appendChild(a); a.click(); window.URL.revokeObjectURL(a.href); document.body.removeChild(a); }};
+                        } else { console.log("No audio chunks recorded."); dom.audioSection.classList.add('hidden'); dom.downloadSection.classList.add('hidden'); }
+                        mediaRecorder = null; audioChunks = [];
+                        const finalTranscript = dom.transcriptContainer.value.trim();
                         if (finalTranscript && wasRecording) {
-                            markdownEditor.placeholder = 'AI 正在努力工作中，請稍候...';
-                            generateRealAISummary(finalTranscript);
-                        } else if (wasRecording) {
-                            statusText.textContent = '錄音結束，無逐字稿';
-                            markdownEditor.placeholder = '錄音結束，無逐字稿可供摘要。';
-                            updateUIState();
-                        } else {
-                             if (!isProcessingFile) updateUIState();
-                        }
+                            const apiKey = getActiveApiKey();
+                            if(apiKey) {
+                                dom.markdownEditor.placeholder = 'AI 正在努力工作中，請稍候...';
+                                generateRealAISummary(finalTranscript, apiKey);
+                            } else {
+                                dom.markdownEditor.placeholder = '請提供 API 金鑰以生成摘要。';
+                                alert('錄音已結束。請提供您的 API 金鑰以生成重點摘要。');
+                                updateUIState();
+                            }
+                        } else if (wasRecording) { dom.statusText.textContent = '錄音結束，無逐字稿'; dom.markdownEditor.placeholder = '錄音結束，無逐字稿可供摘要。'; updateUIState(); } else { if (!isProcessingFile) updateUIState(); }
                     };
-
-                     mediaRecorder.onerror = (event) => {
-                         console.error("MediaRecorder 錯誤:", event.error);
-                         alert(`錄音錯誤: ${event.error.name || event.error}`);
-                         stopRecordingFunction(true);
-                     };
-
+                     mediaRecorder.onerror = (event) => { console.error("MediaRecorder 錯誤:", event.error); alert(`錄音錯誤: ${event.error.name || event.error}`); stopRecordingFunction(true); };
                     mediaRecorder.start(1000);
-
                     initSpeechRecognition();
-                    if(recognition) {
-                        recognition.manualStop = false;
-                         try {
-                           recognition.start();
-                            console.log("Speech recognition started.");
-                         } catch (recogStartError) {
-                           console.error("無法啟動語音識別:", recogStartError);
-                           if (recogStartError.name !== 'InvalidStateError') {
-                              alert('無法啟動語音識別，錄音將繼續但無法即時轉錄。');
-                           } else {
-                              console.warn("語音識別已在運行中或狀態不正確。");
-                           }
-                         }
-                    } else {
-                        alert('語音識別API初始化失敗，錄音將繼續但無法即時轉錄。');
-                    }
+                    if(recognition) { recognition.manualStop = false; try { recognition.start(); console.log("Speech recognition started."); } catch (recogStartError) { console.error("無法啟動語音識別:", recogStartError); if (recogStartError.name !== 'InvalidStateError') { alert('無法啟動語音識別，錄音將繼續但無法即時轉錄。'); } else { console.warn("語音識別已在運行中或狀態不正確。"); } } } else { alert('語音識別API初始化失敗，錄音將繼續但無法即時轉錄。'); }
                     updateUIState();
-
-                } catch (err) {
-                    console.error('啟動錄音/識別失敗:', err);
-                     if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-                         alert('無法啟動錄音：需要麥克風權限。請在瀏覽器設定中允許麥克風存取。');
-                     } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
-                         alert('無法啟動錄音：找不到可用的麥克風裝置。');
-                     } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') {
-                          alert('無法啟動錄音：麥克風目前可能被其他應用程式佔用或發生硬體錯誤。');
-                     } else {
-                         alert('無法啟動錄音：' + (err.message || '未知錯誤') + '\n請檢查麥克風權限或裝置。');
-                     }
-                    isRecording = false;
-                    isPaused = false;
-                    if (err.constraint && err.constraint.name === 'audio' && err.target && err.target.getTracks) {
-                         err.target.getTracks().forEach(track => track.stop());
-                         console.log('Stream tracks stopped due to error.');
-                    } else if (typeof stream !== 'undefined' && stream && stream.getTracks) {
-                       stream.getTracks().forEach(track => track.stop());
-                       console.log('Stream tracks stopped as part of error handling.');
-                    }
-                    updateUIState();
-                    if (recognition) {
-                       try { recognition.abort(); console.log('Recognition aborted on error.'); } catch(e){ console.error('Error aborting recognition on error:', e); }
-                       recognition = null;
-                    }
-                    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-                       try { mediaRecorder.stop(); console.log('MediaRecorder stopped on error.'); } catch(e){ console.error('Error stopping mediaRecorder on error:', e); }
-                    }
-                    mediaRecorder = null;
-                    audioChunks = [];
-                }
+                } catch (err) { console.error('啟動錄音/識別失敗:', err); if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') { alert('無法啟動錄音：需要麥克風權限。請在瀏覽器設定中允許麥克風存取。'); } else if (err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') { alert('無法啟動錄音：找不到可用的麥克風裝置。'); } else if (err.name === 'NotReadableError' || err.name === 'TrackStartError') { alert('無法啟動錄音：麥克風目前可能被其他應用程式佔用或發生硬體錯誤。'); } else { alert('無法啟動錄音：' + (err.message || '未知錯誤') + '\n請檢查麥克風權限或裝置。'); } isRecording = false; isPaused = false; updateUIState(); if (recognition) { try { recognition.abort(); } catch(e){} recognition = null; } if (mediaRecorder && mediaRecorder.state !== 'inactive') { try { mediaRecorder.stop(); } catch(e){} } mediaRecorder = null; audioChunks = []; }
             });
 
-            pauseButton.addEventListener('click', () => {
+            dom.pauseButton.addEventListener('click', () => {
                 if (!isRecording || isPaused || !mediaRecorder || isProcessingFile || mediaRecorder.state !== 'recording') return;
-                console.log('Pausing...');
-                 try {
-                    mediaRecorder.pause();
-                    if (recognition) {
-                        recognition.manualStop = true;
-                        recognition.stop();
-                         console.log('Speech recognition stopped for pause.');
-                    }
-                    isPaused = true;
-                    updateUIState();
-                 } catch (e) {
-                      console.error("Pause failed:", e);
-                      alert("暫停失敗，請檢查控制台。");
-                 }
+                console.log('Pausing...'); try { mediaRecorder.pause(); if (recognition) { recognition.manualStop = true; recognition.stop(); console.log('Speech recognition stopped for pause.'); } isPaused = true; updateUIState(); } catch (e) { console.error("Pause failed:", e); alert("暫停失敗，請檢查控制台。"); }
             });
 
-            resumeButton.addEventListener('click', () => {
+            dom.resumeButton.addEventListener('click', () => {
                 if (!isRecording || !isPaused || !mediaRecorder || isProcessingFile || mediaRecorder.state !== 'paused') return;
-                console.log('Resuming...');
-                 try {
-                    mediaRecorder.resume();
-                    if (recognition) {
-                        recognition.manualStop = false;
-                        recognition.start();
-                         console.log('Speech recognition restarted for resume.');
-                    }
-                    isPaused = false;
-                    updateUIState();
-                 } catch(e) {
-                     console.error("Resume failed:", e);
-                      alert("繼續錄音失敗，請檢查控制台。");
-                 }
+                console.log('Resuming...'); try { mediaRecorder.resume(); if (recognition) { recognition.manualStop = false; recognition.start(); console.log('Speech recognition restarted for resume.'); } isPaused = false; updateUIState(); } catch(e) { console.error("Resume failed:", e); alert("繼續錄音失敗，請檢查控制台。"); }
             });
 
-            stopButton.addEventListener('click', () => {
-                 stopRecordingFunction(false, false);
-            });
+            dom.stopButton.addEventListener('click', () => { stopRecordingFunction(false, false); });
 
-             // Encapsulated stop logic
              function stopRecordingFunction(isError = false, stoppedForFileUpload = false) {
                  const canStopMediaRecorder = mediaRecorder && (mediaRecorder.state === 'recording' || mediaRecorder.state === 'paused');
                  const canStopRecognition = window.speechRecognitionInstance;
-
-                 if (!canStopMediaRecorder && !canStopRecognition && !stoppedForFileUpload) {
-                     console.log("No active recording or recognition to stop.");
-                     isRecording = false;
-                     isPaused = false;
-                     if(window.speechRecognitionInstance) {
-                         try { window.speechRecognitionInstance.abort(); } catch(e){}
-                         window.speechRecognitionInstance = null;
-                     }
-                     if (!isProcessingFile) updateUIState();
-                     return;
-                 }
-
+                 if (!canStopMediaRecorder && !canStopRecognition && !stoppedForFileUpload) { console.log("No active recording or recognition to stop."); isRecording = false; isPaused = false; if(window.speechRecognitionInstance) { try { window.speechRecognitionInstance.abort(); } catch(e){} window.speechRecognitionInstance = null; } if (!isProcessingFile) updateUIState(); return; }
                  console.log(`Stopping recording... (Error: ${isError}, For File Upload: ${stoppedForFileUpload})`);
-                 const wasRecordingState = isRecording;
-                 isRecording = false;
-                 isPaused = false;
-
-                 if (canStopRecognition) {
-                    canStopRecognition.manualStop = true;
-                    try {
-                       canStopRecognition.abort();
-                       console.log("Speech recognition aborted.");
-                    } catch (e) { console.error("Error aborting recognition:", e); }
-                    window.speechRecognitionInstance = null;
-                 }
-
-                 if (canStopMediaRecorder) {
-                    try {
-                       mediaRecorder.stop();
-                       console.log("MediaRecorder stop requested.");
-                    } catch (e) {
-                        console.error("Error stopping MediaRecorder:", e);
-                        isRecording = false;
-                        isPaused = false;
-                         if (mediaRecorder && mediaRecorder.stream) {
-                             mediaRecorder.stream.getTracks().forEach(track => track.stop());
-                             console.log('Stream tracks stopped after MediaRecorder stop failed.');
-                         }
-
-                        if (!isProcessingFile) {
-                            updateUIState();
-                            statusText.textContent = "停止錄音時發生錯誤";
-                        }
-                         audioChunks = [];
-                         mediaRecorder = null;
-                    }
-                 } else {
-                     console.warn("MediaRecorder was not active during stop request.");
-                     isRecording = false;
-                     isPaused = false;
-                     if (mediaRecorder && mediaRecorder.stream) {
-                         mediaRecorder.stream.getTracks().forEach(track => track.stop());
-                          console.log('Stream tracks stopped as MediaRecorder was inactive.');
-                     }
-                     mediaRecorder = null;
-
-                     if (!stoppedForFileUpload && !isProcessingFile) {
-                         updateUIState();
-                         if (wasRecordingState) {
-                           statusText.textContent = "錄音已停止";
-                         } else {
-                           statusText.textContent = "準備就緒";
-                         }
-                     }
-                      audioChunks = [];
-                       const finalTranscript = transcriptContainer.value.trim();
-                       if (wasRecordingState && finalTranscript && !isProcessingFile) {
-                            console.log("Triggering summary after stopping recognition (no active MediaRecorder).")
-                            generateRealAISummary(finalTranscript);
-                       }
-                 }
+                 const wasRecordingState = isRecording; isRecording = false; isPaused = false;
+                 if (canStopRecognition) { canStopRecognition.manualStop = true; try { canStopRecognition.abort(); console.log("Speech recognition aborted."); } catch (e) { console.error("Error aborting recognition:", e); } window.speechRecognitionInstance = null; }
+                 if (canStopMediaRecorder) { try { mediaRecorder.stop(); console.log("MediaRecorder stop requested."); } catch (e) { console.error("Error stopping MediaRecorder:", e); isRecording = false; isPaused = false; if (mediaRecorder && mediaRecorder.stream) { mediaRecorder.stream.getTracks().forEach(track => track.stop()); } if (!isProcessingFile) { updateUIState(); dom.statusText.textContent = "停止錄音時發生錯誤"; } audioChunks = []; mediaRecorder = null; } }
+                 else { console.warn("MediaRecorder was not active during stop request."); isRecording = false; isPaused = false; if (mediaRecorder && mediaRecorder.stream) { mediaRecorder.stream.getTracks().forEach(track => track.stop()); } mediaRecorder = null; if (!stoppedForFileUpload && !isProcessingFile) { updateUIState(); if (wasRecordingState) { dom.statusText.textContent = "錄音已停止"; } else { dom.statusText.textContent = "準備就緒"; }} audioChunks = []; const finalTranscript = dom.transcriptContainer.value.trim(); if (wasRecordingState && finalTranscript && !isProcessingFile) { console.log("Triggering summary after stopping recognition (no active MediaRecorder)."); const apiKey = getActiveApiKey(); if(apiKey) { generateRealAISummary(finalTranscript, apiKey); } else { alert("錄音已結束。請提供API金鑰以生成摘要。"); } } }
             }
 
-            // --- AI Transcription Function (for uploaded files) ---
-            async function transcribeAudioFile(base64Data, mimeType) {
+            async function transcribeAudioFile(base64Data, mimeType, apiKey) {
                 console.log(`向 Gemini API 發送轉錄請求 (MIME: ${mimeType})...`);
                 setProcessingState(true, '正在轉錄音檔...');
-
-                const prompt = "請將此音訊檔案轉錄成符合台灣口語習慣的文字逐字稿，包含適當的標點符號。";
-
-                regenerateSummaryButton.disabled = true;
-                regenerateSummaryButton.classList.add('opacity-50', 'cursor-not-allowed');
-                 copyTranscriptButton.disabled = true;
-                 copyTranscriptButton.classList.add('opacity-50', 'cursor-not-allowed');
-                 copyMarkdownButton.disabled = true;
-                 copyMarkdownButton.classList.add('opacity-50', 'cursor-not-allowed');
-
-
+                dom.regenerateSummaryButton.disabled = true; dom.copyTranscriptButton.disabled = true; dom.copyMarkdownButton.disabled = true;
                 try {
-                    const response = await fetch(GEMINI_API_URL, {
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [
-                                {
-                                    role: "user",
-                                    parts: [
-                                        { text: prompt },
-                                        { inlineData: { mimeType: mimeType, data: base64Data } }
-                                    ]
-                                }
-                            ],
-                             safetySettings: [
-                               { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-                               { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-                               { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-                               { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-                             ],
-                             generationConfig: { temperature: 0.3 }
-                        }),
+                        body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: "請將此音訊檔案轉錄成符合台灣口語習慣的文字逐字稿，包含適當的標點符號。" }, { inlineData: { mimeType: mimeType, data: base64Data } }]}], safetySettings: [{ category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },{ category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_MEDIUM_AND_ABOVE" },{ category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },{ category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" }], generationConfig: { temperature: 0.3 } }),
                     });
-
-                    if (!response.ok) {
-                        let errorMsg = `API請求失敗: ${response.status} ${response.statusText}`;
-                        try {
-                            const errorData = await response.json();
-                            console.error('Gemini API Error Response:', errorData);
-                             if (errorData?.error?.message) {
-                                 errorMsg += ` - ${errorData.error.message}`;
-                             } else {
-                                 errorMsg += ` - 未知API錯誤`;
-                             }
-                        } catch (e) {
-                            console.error('Failed to parse error response:', e);
-                        }
-                         throw new Error(errorMsg);
-                    }
-
+                    if (!response.ok) { let errorMsg = `API請求失敗: ${response.status} ${response.statusText}`; try { const errorData = await response.json(); console.error('Gemini API Error Response:', errorData); if (errorData?.error?.message) { errorMsg += ` - ${errorData.error.message}`; } else { errorMsg += ` - 未知API錯誤`; }} catch (e) {} throw new Error(errorMsg); }
                     const data = await response.json();
-                     console.log("Gemini API Response (Transcription):", data);
-
                     if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
                         const transcriptText = data.candidates[0].content.parts[0].text;
-                        transcriptContainer.value = transcriptText.trim();
+                        dom.transcriptContainer.value = transcriptText.trim();
                         console.log("成功獲取轉錄稿.");
-                        setProcessingState(false, '轉錄完成！'); // This also calls updateUIState
-                        generateRealAISummary(transcriptText);
-                    } else if (data.promptFeedback?.blockReason) {
-                         console.warn('Gemini API Request blocked:', data.promptFeedback.blockReason, data.promptFeedback.safetyRatings);
-                         throw new Error(`請求因 ${data.promptFeedback.blockReason} 被阻止。`);
-                    } else if (data.candidates?.[0]?.finishReason && data.candidates[0].finishReason !== 'STOP') {
-                         console.warn(`Gemini API Response finished with reason: ${data.candidates[0].finishReason}`, data.candidates[0]?.safetyRatings);
-                         throw new Error(`轉錄因 "${data.candidates[0].finishReason}" 而中止。`);
-                    }
-                    else {
-                        console.error('Gemini API 回應格式不符或無內容:', data);
-                        const detail = JSON.stringify(data);
-                         throw new Error(`無法從 API 回應中提取有效的轉錄內容。 回應詳情: ${detail}`);
-                    }
-
-                } catch (error) {
-                    console.error('調用 Gemini API 進行轉錄時發生錯誤:', error);
-                    transcriptContainer.value = `轉錄檔案時遇到錯誤：\n${error.message}\n\n請檢查檔案格式、API 金鑰或網路連線。`;
-                    setProcessingState(false, '轉錄失敗');
-                    statusText.textContent = '轉錄失敗';
-                    fileNameDisplay.textContent = '';
-                    markdownEditor.value = '';
-                    markdownEditor.placeholder = '轉錄失敗，無法生成摘要。';
-                } finally {
-                    // Final UI update handled by setProcessingState(false,...) or updateUIState() within it
-                }
+                        setProcessingState(false, '轉錄完成！');
+                        generateRealAISummary(transcriptText, apiKey);
+                    } else if (data.promptFeedback?.blockReason) { throw new Error(`請求因 ${data.promptFeedback.blockReason} 被阻止。`); }
+                    else if (data.candidates?.[0]?.finishReason && data.candidates[0].finishReason !== 'STOP') { throw new Error(`轉錄因 "${data.candidates[0].finishReason}" 而中止。`); }
+                    else { const detail = JSON.stringify(data); throw new Error(`無法從 API 回應中提取有效的轉錄內容。`); }
+                } catch (error) { console.error('調用 Gemini API 進行轉錄時發生錯誤:', error); dom.transcriptContainer.value = `轉錄檔案時遇到錯誤：\n${error.message}\n\n請檢查檔案格式、API 金鑰或網路連線。`; setProcessingState(false, '轉錄失敗'); dom.statusText.textContent = '轉錄失敗'; dom.fileNameDisplay.textContent = ''; dom.markdownEditor.value = ''; dom.markdownEditor.placeholder = '轉錄失敗，無法生成摘要。'; }
             }
 
-
-            // --- AI Summary Generation ---
-            async function generateRealAISummary(transcript) {
-                 if (isProcessingFile) {
-                      console.log("延遲摘要生成，等待檔案處理完成...");
-                      return;
-                 }
-                 if (!transcript || transcript.trim().length === 0) {
-                    console.log("無逐字稿，取消摘要。");
-                    statusIndicator.classList.remove('bg-yellow-500');
-                    if (!isRecording && !isProcessingFile) {
-                        statusText.textContent = '準備就緒';
-                        statusIndicator.classList.add('bg-gray-400');
-                    }
-                    markdownEditor.value = '';
-                    markdownEditor.placeholder = '無逐字稿可供摘要。';
-                    updateUIState();
-                    return;
-                }
-
+            async function generateRealAISummary(transcript, apiKey) {
+                 if (isProcessingFile) { console.log("延遲摘要生成，等待檔案處理完成..."); return; }
+                 if (!transcript || transcript.trim().length === 0) { console.log("無逐字稿，取消摘要。"); dom.markdownEditor.value = ''; dom.markdownEditor.placeholder = '無逐字稿可供摘要。'; updateUIState(); return; }
                 console.log("向 Gemini API 發送摘要請求...");
-                markdownEditor.placeholder = 'AI 摘要生成中...';
-                markdownEditor.value = '';
-                statusIndicator.classList.remove('bg-gray-400', 'paused-indicator', 'bg-red-500', 'recording-pulse', 'processing-indicator');
-                statusIndicator.classList.add('bg-yellow-500');
-                statusText.textContent = '正在生成摘要...';
-
+                dom.markdownEditor.placeholder = 'AI 摘要生成中...'; dom.markdownEditor.value = '';
+                dom.statusIndicator.className = 'w-4 h-4 rounded-full mr-2 transition-colors duration-300 flex-shrink-0 bg-yellow-500';
+                dom.statusText.textContent = '正在生成摘要...';
+                dom.regenerateSummaryButton.disabled = true; dom.copyMarkdownButton.disabled = true;
                 const prompt = `請根據以下逐字稿，生成一份簡潔、重點清晰的摘要，捕捉主要的討論內容、想法、結論或關鍵信息。摘要風格力求自然易懂，使用 Markdown 格式化重點 (例如使用標題、列表)。\n\n逐字稿內容：\n"${transcript}"\n\n摘要 (Markdown 格式)：`;
-
-                regenerateSummaryButton.disabled = true;
-                regenerateSummaryButton.classList.add('opacity-50', 'cursor-not-allowed');
-                 copyMarkdownButton.disabled = true;
-                 copyMarkdownButton.classList.add('opacity-50', 'cursor-not-allowed');
-
-
                 try {
-                    const response = await fetch(GEMINI_API_URL, {
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [
-                                {
-                                    role: "user",
-                                    parts: [{ text: prompt }]
-                                }
-                            ],
-                            safetySettings: [
-                              { category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-                              { category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-                              { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-                              { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },
-                            ],
-                            generationConfig: { temperature: 0.7, maxOutputTokens: 1024 }
-                        }),
+                        body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], safetySettings: [{ category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },{ category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_MEDIUM_AND_ABOVE" },{ category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },{ category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" }], generationConfig: { temperature: 0.7, maxOutputTokens: 1024 } }),
                     });
-
-                    if (!response.ok) {
-                        let errorMsg = `API請求失敗: ${response.status} ${response.statusText}`;
-                        try {
-                            const errorData = await response.json();
-                            console.error('Gemini API Error Response (Summary):', errorData);
-                             if (errorData?.error?.message) {
-                                 errorMsg += ` - ${errorData.error.message}`;
-                             } else {
-                                 errorMsg += ` - 未知API錯誤`;
-                             }
-                        } catch (e) { /* ignore parsing error */ }
-                         throw new Error(errorMsg);
-                    }
-
+                    if (!response.ok) { let errorMsg = `API請求失敗: ${response.status} ${response.statusText}`; try { const errorData = await response.json(); if (errorData?.error?.message) { errorMsg += ` - ${errorData.error.message}`; }} catch (e) {} throw new Error(errorMsg); }
                     const data = await response.json();
-                    console.log("Gemini API Response (Summary):", data);
-
                      if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
                         const summaryText = data.candidates[0].content.parts[0].text;
-                        markdownEditor.value = summaryText.trim();
-                        console.log("成功獲取摘要.");
-                        markdownEditor.placeholder = '摘要已生成。';
-                        statusText.textContent = '摘要完成！';
-                    } else if (data.promptFeedback?.blockReason) {
-                         console.warn('Gemini API Summary Request blocked:', data.promptFeedback.blockReason);
-                         markdownEditor.value = `抱歉，摘要請求因 "${data.promptFeedback.blockReason}" 被阻止。`;
-                         markdownEditor.placeholder = '摘要生成被阻止。';
-                         statusText.textContent = '摘要被阻止';
-                    } else if (data.candidates?.[0]?.finishReason && data.candidates[0].finishReason !== 'STOP') {
-                         console.warn(`Gemini API Summary Response finished with reason: ${data.candidates[0].finishReason}`, data.candidates[0]?.safetyRatings);
-                         markdownEditor.value = `抱歉，摘要生成因 "${data.candidates[0].finishReason}" 而中止。`;
-                         markdownEditor.placeholder = '摘要生成中止。';
-                         statusText.textContent = '摘要中止';
-                    } else {
-                        console.error('Gemini API 摘要回應格式不符或無內容:', data);
-                        markdownEditor.value = "抱歉，無法從 API 回應中提取有效的摘要內容。";
-                        markdownEditor.placeholder = '無法獲取摘要。';
-                         statusText.textContent = '摘要失敗';
-                    }
-
-                } catch (error) {
-                    console.error('調用 Gemini API 生成摘要時發生錯誤:', error);
-                    markdownEditor.value = `生成摘要時遇到錯誤：\n${error.message}\n\n請檢查 API 金鑰、網路連線或稍後再試。`;
-                    markdownEditor.placeholder = '摘要生成失敗。';
-                     statusText.textContent = '摘要失敗';
-                } finally {
-                    statusIndicator.classList.remove('bg-yellow-500');
-
-                    if (!isProcessingFile) {
-                         updateUIState();
-                         if (isRecording) {
-                             updateUIState(); // Revert status text/indicator to recording state
-                         }
-                    } else {
-                          statusIndicator.classList.add('processing-indicator');
-                          statusText.textContent = '檔案處理中...';
-                    }
-
-                     regenerateSummaryButton.disabled = transcriptContainer.value.trim().length === 0 || isProcessingFile;
-                     regenerateSummaryButton.classList.toggle('opacity-50', regenerateSummaryButton.disabled);
-                     regenerateSummaryButton.classList.toggle('cursor-not-allowed', regenerateSummaryButton.disabled);
-
-                     copyMarkdownButton.disabled = markdownEditor.value.trim().length === 0;
-                     copyMarkdownButton.classList.toggle('opacity-50', copyMarkdownButton.disabled);
-                     copyMarkdownButton.classList.toggle('cursor-not-allowed', copyMarkdownButton.disabled);
-
-                     copyTranscriptButton.disabled = transcriptContainer.value.trim().length === 0;
-                     copyTranscriptButton.classList.toggle('opacity-50', copyTranscriptButton.disabled);
-                     copyTranscriptButton.classList.toggle('cursor-not-allowed', copyTranscriptButton.disabled);
-                }
+                        dom.markdownEditor.value = summaryText.trim();
+                        dom.markdownEditor.placeholder = '摘要已生成。'; dom.statusText.textContent = '摘要完成！';
+                    } else if (data.promptFeedback?.blockReason) { dom.markdownEditor.value = `抱歉，摘要請求因 "${data.promptFeedback.blockReason}" 被阻止。`; dom.statusText.textContent = '摘要被阻止'; }
+                    else if (data.candidates?.[0]?.finishReason && data.candidates[0].finishReason !== 'STOP') { dom.markdownEditor.value = `抱歉，摘要生成因 "${data.candidates[0].finishReason}" 而中止。`; dom.statusText.textContent = '摘要中止'; }
+                    else { dom.markdownEditor.value = "抱歉，無法從 API 回應中提取有效的摘要內容。"; dom.statusText.textContent = '摘要失敗'; }
+                } catch (error) { console.error('調用 Gemini API 生成摘要時發生錯誤:', error); dom.markdownEditor.value = `生成摘要時遇到錯誤：\n${error.message}`; dom.statusText.textContent = '摘要失敗'; }
+                finally { dom.statusIndicator.classList.remove('bg-yellow-500'); if (!isProcessingFile) { updateUIState(); if (isRecording) { updateUIState(); } } else { dom.statusIndicator.classList.add('processing-indicator'); dom.statusText.textContent = '檔案處理中...'; } }
             }
 
-             // Initial UI setup
+            // --- API Key Modal and Backup Logic ---
+            dom.openApiKeyModalLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                document.getElementById('api-key-modal').style.display = 'flex';
+            });
+            document.getElementById('api-key-modal').addEventListener('click', (e) => {
+                if(e.target.classList.contains('modal-overlay') || e.target.classList.contains('modal-close')) {
+                    document.getElementById('api-key-modal').style.display = 'none';
+                }
+            });
+
+            dom.enableBackupKey.addEventListener('click', (e) => {
+                e.preventDefault();
+                if (confirm("這將啟用系統內建的備用金鑰進行 AI 功能。\n\n此金鑰為多人共用，尖峰時段可能不穩定或無法使用。\n強烈建議您使用自己的免費金鑰以獲得最佳體驗。\n\n確定要啟用備用金鑰嗎？")) {
+                    isBackupKeyEnabled = true;
+                    dom.apiKeyInput.value = '已啟用系統備用金鑰';
+                    dom.apiKeyInput.disabled = true;
+                    dom.apiInfoBox.className = 'api-info-box api-info-box-warning';
+                    dom.apiInfoText.textContent = '已啟用系統備用金鑰。此金鑰為多人共用，可能不穩定。若要使用自己的金鑰，請重新整理頁面。';
+                    dom.enableBackupKey.style.display = 'none';
+                    alert('系統備用金鑰已啟用。');
+                }
+            });
+
              updateUIState();
         });
     </script>
-    <!-- FileSaver.js for MP3 download -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </body>
 </html>
