@@ -163,11 +163,6 @@
             border-color: #3b82f6; /* blue-500 */
             color: #1e3a8a; /* blue-900 */
         }
-        .api-info-box-warning {
-            background-color: #fef3c7; /* amber-100 */
-            border-color: #f59e0b; /* amber-500 */
-            color: #92400e; /* amber-800 */
-        }
         .api-label-wrapper {
             display: flex;
             justify-content: space-between;
@@ -190,12 +185,6 @@
             cursor: pointer;
         }
         .api-tutorial-link:hover { text-decoration: underline; }
-        #enableBackupKey {
-            color: #6b7280; /* gray-500 */
-            transition: color 0.2s, transform 0.2s;
-            text-decoration: none;
-        }
-        #enableBackupKey:hover { color: #3b82f6; /* blue-500 */ transform: rotate(45deg); }
         #geminiApiKey {
             width: 100%;
             padding: 0.5rem 0.75rem;
@@ -272,12 +261,9 @@
                     <label for="geminiApiKey">您的 API 金鑰 (必填)</label>
                     <div class="api-options">
                         <a href="#" class="api-tutorial-link">(如何取得？)</a>
-                        <a href="#" id="enableBackupKey" title="無法取得金鑰？點此啟用備用金鑰">
-                            <i class="fas fa-cog text-xl"></i>
-                        </a>
                     </div>
                 </div>
-                <input type="text" id="geminiApiKey" placeholder="請貼上您從 Google AI Studio 取得的 API 金鑰">
+                <input type="password" id="geminiApiKey" autocomplete="off" placeholder="請貼上您從 Google AI Studio 取得的 API 金鑰">
             </div>
 
             <div id="audioSection" class="mb-6 hidden">
@@ -404,13 +390,9 @@
                 apiKeyInput: document.getElementById('geminiApiKey'),
                 apiInfoBox: document.getElementById('apiInfoBox'),
                 apiInfoText: document.getElementById('apiInfoText'),
-                enableBackupKey: document.getElementById('enableBackupKey'),
                 apiKeyModal: document.getElementById('api-key-modal'),
                 openApiKeyModalLink: document.querySelector('.api-tutorial-link')
             };
-
-            const BACKUP_API_KEY = 'AIzaSyCerlnUOTQ4-5K6VRpugpRI1URcOF6ai2w';
-            let isBackupKeyEnabled = false;
 
             let mediaRecorder;
             let audioChunks = [];
@@ -424,7 +406,6 @@
             let isProcessingFile = false;
 
             const getActiveApiKey = () => {
-                if (isBackupKeyEnabled) return BACKUP_API_KEY;
                 return dom.apiKeyInput.value.trim();
             };
 
@@ -753,27 +734,14 @@
                 finally { dom.statusIndicator.classList.remove('bg-yellow-500'); if (!isProcessingFile) { updateUIState(); if (isRecording) { updateUIState(); } } else { dom.statusIndicator.classList.add('processing-indicator'); dom.statusText.textContent = '檔案處理中...'; } }
             }
 
-            // --- API Key Modal and Backup Logic ---
+            // --- API Key Modal ---
             dom.openApiKeyModalLink.addEventListener('click', (e) => {
                 e.preventDefault();
-                document.getElementById('api-key-modal').style.display = 'flex';
+                dom.apiKeyModal.style.display = 'flex';
             });
-            document.getElementById('api-key-modal').addEventListener('click', (e) => {
+            dom.apiKeyModal.addEventListener('click', (e) => {
                 if(e.target.classList.contains('modal-overlay') || e.target.classList.contains('modal-close')) {
-                    document.getElementById('api-key-modal').style.display = 'none';
-                }
-            });
-
-            dom.enableBackupKey.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (confirm("這將啟用系統內建的備用金鑰進行 AI 功能。\n\n此金鑰為多人共用，尖峰時段可能不穩定或無法使用。\n強烈建議您使用自己的免費金鑰以獲得最佳體驗。\n\n確定要啟用備用金鑰嗎？")) {
-                    isBackupKeyEnabled = true;
-                    dom.apiKeyInput.value = '已啟用系統備用金鑰';
-                    dom.apiKeyInput.disabled = true;
-                    dom.apiInfoBox.className = 'api-info-box api-info-box-warning';
-                    dom.apiInfoText.textContent = '已啟用系統備用金鑰。此金鑰為多人共用，可能不穩定。若要使用自己的金鑰，請重新整理頁面。';
-                    dom.enableBackupKey.style.display = 'none';
-                    alert('系統備用金鑰已啟用。');
+                    dom.apiKeyModal.style.display = 'none';
                 }
             });
 
