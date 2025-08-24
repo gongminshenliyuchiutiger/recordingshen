@@ -143,7 +143,6 @@
         input[type="file"] {
             display: none;
         }
-        /* --- New API Key Section Styles --- */
         .api-key-section {
             background-color: #eef2ff; /* indigo-50 */
             border: 1px solid #c7d2fe; /* indigo-200 */
@@ -198,7 +197,6 @@
         }
         #geminiApiKey:disabled { background-color: #f3f4f6; cursor: not-allowed; opacity: 0.7; }
 
-        /* --- Modal --- */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); display: none; justify-content: center; align-items: center; z-index: 1000; animation: fadeInModal 0.3s; }
         @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
         .modal-content { background: white; padding: 2rem; border-radius: 0.5rem; max-width: 600px; width: 90%; position: relative; max-height: 80vh; overflow-y: auto; }
@@ -210,6 +208,42 @@
         .modal-content code { background-color: #e5e7eb; padding: 0.125rem 0.25rem; border-radius: 0.25rem; font-family: monospace; }
         .modal-content a { color: #3b82f6; text-decoration: none; font-weight: 500; }
         .modal-content a:hover { text-decoration: underline; }
+
+        /* --- NEW: Mascot Styles --- */
+        #mascot {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 120px;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 999; /* Below modal */
+        }
+        #mascot:hover {
+            transform: scale(1.15) rotate(-8deg);
+            animation: mascot-shake 0.5s infinite alternate;
+        }
+        .particle {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2001; /* Above everything */
+            transition: transform 1s ease-out, opacity 1s ease-out;
+        }
+        @keyframes mascot-shake {
+            0% { transform: scale(1.15) rotate(-8deg); }
+            100% { transform: scale(1.15) rotate(8deg); }
+        }
+        @media (max-width: 768px) {
+            #mascot {
+                width: 80px;
+                bottom: 15px;
+                left: 15px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -252,7 +286,6 @@
                 </div>
             </div>
 
-            <!-- API Key Section -->
             <div class="api-key-section">
                 <div class="api-info-box api-info-box-info" id="apiInfoBox">
                     <p id="apiInfoText">請提供您的 Google Gemini API 金鑰以啟用AI功能 (音檔轉錄 & 重點摘要)。</p>
@@ -349,7 +382,6 @@
         </div>
     </div>
     
-    <!-- Modal for API Key Tutorial -->
     <div class="modal-overlay" id="api-key-modal">
         <div class="modal-content">
             <span class="modal-close">&times;</span>
@@ -365,6 +397,9 @@
             <p><strong>提醒：</strong>請妥善保管您的 API 金鑰，不要與他人分享。</p>
         </div>
     </div>
+
+    <!-- NEW: Mascot Element -->
+    <img id="mascot" src="image/LiyuChillGuy.svg" alt="LiyuChillGuy Mascot">
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -734,7 +769,6 @@
                 finally { dom.statusIndicator.classList.remove('bg-yellow-500'); if (!isProcessingFile) { updateUIState(); if (isRecording) { updateUIState(); } } else { dom.statusIndicator.classList.add('processing-indicator'); dom.statusText.textContent = '檔案處理中...'; } }
             }
 
-            // --- API Key Modal ---
             dom.openApiKeyModalLink.addEventListener('click', (e) => {
                 e.preventDefault();
                 dom.apiKeyModal.style.display = 'flex';
@@ -746,6 +780,49 @@
             });
 
              updateUIState();
+             
+            // --- NEW: Mascot Interaction Logic ---
+            const mascotElement = document.getElementById('mascot');
+
+            function createParticle(x, y) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                document.body.appendChild(particle);
+
+                // Randomize particle properties
+                const size = Math.floor(Math.random() * 10 + 5);
+                // Colors matching the app's button theme
+                const colors = ['#4f46e5', '#10b981', '#f59e0b', '#dc2626', '#3b82f6'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.background = color;
+                particle.style.left = `${x - size / 2}px`;
+                particle.style.top = `${y - size / 2}px`;
+
+                const destinationX = (Math.random() - 0.5) * 300;
+                const destinationY = (Math.random() - 0.5) * 300;
+                const rotation = Math.random() * 520;
+                
+                // Animate the particle
+                requestAnimationFrame(() => {
+                    particle.style.transform = `translate(${destinationX}px, ${destinationY}px) rotate(${rotation}deg)`;
+                    particle.style.opacity = '0';
+                });
+                
+                // Remove particle after animation
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000); // 1000ms is transition duration
+            }
+
+            mascotElement.addEventListener('click', (e) => {
+                // Create a burst of particles on click
+                for (let i = 0; i < 30; i++) {
+                    createParticle(e.clientX, e.clientY);
+                }
+            });
         });
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
