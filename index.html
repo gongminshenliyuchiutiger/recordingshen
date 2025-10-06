@@ -722,7 +722,7 @@
                 setProcessingState(true, '正在轉錄音檔...');
                 dom.regenerateSummaryButton.disabled = true; dom.copyTranscriptButton.disabled = true; dom.copyMarkdownButton.disabled = true;
                 try {
-                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: "請將此音訊檔案轉錄成符合台灣口語習慣的文字逐字稿，包含適當的標點符號。" }, { inlineData: { mimeType: mimeType, data: base64Data } }]}], safetySettings: [{ category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },{ category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_MEDIUM_AND_ABOVE" },{ category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },{ category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" }], generationConfig: { temperature: 0.3 } }),
@@ -749,12 +749,12 @@
                 dom.statusIndicator.className = 'w-4 h-4 rounded-full mr-2 transition-colors duration-300 flex-shrink-0 bg-yellow-500';
                 dom.statusText.textContent = '正在生成摘要...';
                 dom.regenerateSummaryButton.disabled = true; dom.copyMarkdownButton.disabled = true;
-                const prompt = `請根據以下逐字稿，生成一份簡潔、重點清晰的摘要，捕捉主要的討論內容、想法、結論或關鍵信息。摘要風格力求自然易懂，使用 Markdown 格式化重點 (例如使用標題、列表)。\n\n逐字稿內容：\n"${transcript}"\n\n摘要 (Markdown 格式)：`;
+                const prompt = `請根據以下逐字稿，生成一份簡潔、重點清晰的摘要，捕捉主要的討論內容、想法、結論或關鍵訊息。摘要風格力求自然易懂，使用 Markdown 格式化重點 (例如使用標題、列表)。\n\n逐字稿內容：\n"${transcript}"\n\n摘要 (Markdown 格式)：`;
                 try {
-                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
+                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], safetySettings: [{ category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },{ category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_MEDIUM_AND_ABOVE" },{ category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },{ category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" }], generationConfig: { temperature: 0.7, maxOutputTokens: 1024 } }),
+                        body: JSON.stringify({ contents: [{ role: "user", parts: [{ text: prompt }] }], safetySettings: [{ category: "HARM_CATEGORY_HARASSMENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },{ category: "HARM_CATEGORY_HATE_SPEECH", threshold: "BLOCK_MEDIUM_AND_ABOVE" },{ category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_MEDIUM_AND_ABOVE" },{ category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_MEDIUM_AND_ABOVE" }], generationConfig: { temperature: 0.7, maxOutputTokens: 2048 } }),
                     });
                     if (!response.ok) { let errorMsg = `API請求失敗: ${response.status} ${response.statusText}`; try { const errorData = await response.json(); if (errorData?.error?.message) { errorMsg += ` - ${errorData.error.message}`; }} catch (e) {} throw new Error(errorMsg); }
                     const data = await response.json();
